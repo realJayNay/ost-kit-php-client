@@ -81,7 +81,7 @@ class OstKitClient {
     }
 
     public function getAirdropStatus($airdropUuid) {
-        $json = $this->post('/users/airdrop/status', array('airdrop_uuid' => $airdropUuid));
+        $json = $this->get('/users/airdrop/status', array('airdrop_uuid' => $airdropUuid), false);
         return $json['data']['current_status'];
     }
 
