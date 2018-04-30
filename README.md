@@ -19,14 +19,14 @@ $user = $ost->createUser('Ria');
 $user = $ost->createUser('Fred');
 
 // List users. Either the first 25 of the result set, or optionally fetch all users by recursively consuming all result set pages.
-$firstUsers = $ost->listUsers(true); // lists first page of 25 users
+$firstUsers = $ost->listUsers(); // lists first page of 25 users
 $users = $ost->listUsers(true); // lists all users
 
 // Create a transaction type.
-$transactionType = $ost->createTransactionType('Clap', 'user_to_user', 1);
+$transactionType = $ost->createTransactionType('Clap', 'user_to_user', 1); // user_to_user transaction of 1 BT named 'Clap'
 
 // List transaction types.
-$transactionTypes = $ost->listTransactionTypes();
+$transactionTypes = $ost->listTransactionTypes(true); // lists all transaction types
 
 // Retrieve a single user's token balance. This is not implemented by the OST KIT API, but is done by looping over all users until a match is found.
 $tokenBalance = $ost->getUserTokenBalance($uuid);
