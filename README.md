@@ -1,2 +1,68 @@
-# ost-kit-php-client
-OST KIT - PHP Wrapper for the OST KIT API
+# OST KIT - PHP Wrapper for the OST KIT API
+
+A PHP wrapper for the REST API of [OST KIT](https://kit.ost.com) which is currently under active development. This client implements version 0.9.2 of the [OST KIT REST API](https://dev.ost.com).
+
+![Screenshot](ostkit.png)
+
+A Branded Token economy must be setup first in order to use the API, see https://kit.ost.com for more information.
+
+## How to use the client
+
+Create the OST KIT client using your Branded Token economy's `API key` and `API secret`.
+```php
+$ost = OstKitClient::create('YOUR-API-KEY', 'YOUR-API-SECRET');
+
+// Create a user named 'Ria'.
+$user = $ost->createUser('Ria');
+
+// Rename 'Ria' to 'Fred'.
+$user = $ost->createUser('Fred');
+
+// List users. Either the first 25 of the result set, or optionally fetch all users by recursively consuming all result set pages.
+$firstUsers = $ost->listUsers(true); // lists first page of 25 users
+$users = $ost->listUsers(true); // lists all users
+
+// Create a transaction type.
+$transactionType = $ost->createTransactionType('Clap', 'user_to_user', 1);
+
+// List transaction types.
+$transactionTypes = $ost->listTransactionTypes();
+
+// Retrieve a single user's token balance. This is not implemented by the OST KIT API, but is done by looping over all users until a match is found.
+$tokenBalance = $ost->getUserTokenBalance($uuid);
+
+// Execute a transaction type. This transfers a preconfigured amount of Branded Tokens from a user or company to another user or company.
+$transaction = $ost->executeTransactionType($fromUuid, $toUuid, $transactionKind);
+
+// Retrieves the status of the transaction.
+$status = $ost->getTransactionStatus($transaction['transaction_uuid']);
+
+// Airdrop tokens either to all users are to the users that have never received tokens via an airdrop before.
+$aidropUuid = $ost->airdrop(1, 'all'); // airdrop 1 token to all users
+
+// Retrieve the status of the airdrop. 
+// Warning - This functionality currently fails, see https://github.com/realJayNay/ost-kit-php-client/issues/1.
+$airdropStatus = $ost->getAirdropStatus($airdropUuid);
+```
+
+## OST KIT PHP Client Roadmap
+
+Some things to do, and ideas for potential features:
+
+* Improve the **performance** of the web client by making asynchronous, multi-threaded web calls.
+* Improve the **efficiency** of the web client by fully supporting arrays as input type.
+* Automatically derive which JSON sub-array to return based on the `result_type` attribute of the web response.
+* Fully document the API and all function parameters and return types.
+* Automatically assign the _company_ as debtor in `company_to_user` and as creditor in `user_to_company` transaction types.
+* Implement a way to retrieve the user's _wallet address_ based on its `UUID` in OST KIT, so it can be view directly in [OST View](https://view.ost.com).
+
+## Questions, feature requests and bug reports
+If you have questions, have a great idea for the client or ran into issues using this client: please report them in the project's [Issues](https://github.com/realJayNay/ost-kit-php-client/issues) area.  
+
+Brought to you by [Jay Nay](https://github.com/realJayNay)
+
+
+
+
+
+
