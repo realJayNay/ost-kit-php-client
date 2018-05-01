@@ -10,6 +10,8 @@ A Branded Token economy must be setup first in order to use the API, see https:/
 
 Create the OST KIT client using your Branded Token economy's `API key` and `API secret`.
 ```php
+require('lib/OstKitClient.php');
+
 $ost = OstKitClient::create('YOUR-API-KEY', 'YOUR-API-SECRET');
 
 
@@ -33,7 +35,7 @@ $transactionType = $ost->createTransactionType('Clap', 'user_to_user', 1); // us
 $transactionTypes = $ost->listTransactionTypes(true); // lists all transaction types
 
 // Execute a transaction type. This transfers a preconfigured amount of Branded Tokens from a user or company to another user or company.
-$transaction = $ost->executeTransactionType($fromUuid, $toUuid, $transactionKind);
+$transaction = $ost->executeTransactionType($fromUuid, $toUuid, 'Clap');
 
 // ... and retrieve the status of the transaction. Allow the transaction some time to get processed on the OpenST utility chains. 
 $status = $ost->getTransactionStatus($transaction['transaction_uuid']);
@@ -44,14 +46,14 @@ $status = $ost->getTransactionStatus($transaction['transaction_uuid']);
 $aidropUuid = $ost->airdrop(1, 'all'); // airdrop 1 token to all users
 
 // Retrieve the status of the airdrop. 
-// Warning - This functionality currently fails, see https://github.com/realJayNay/ost-kit-php-client/issues/1.
 $airdropStatus = $ost->getAirdropStatus($airdropUuid);
 
 
 /* NON-API functions */
 
-// Retrieve a single user's token balance. This is not implemented by the OST KIT API, but is done by looping over all users until a match is found.
-$tokenBalance = $ost->getUserTokenBalance($uuid);
+// Retrieve a single user's token balance. 
+//This is not implemented by the OST KIT API, but is done via a workaround by renaming a user to its own username to get the user info.
+$tokenBalance = $ost->getUserTokenBalance($user['uuid'], $user['name']);
 ```
 
 ## OST KIT PHP Client Roadmap

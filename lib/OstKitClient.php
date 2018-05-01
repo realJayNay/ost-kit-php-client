@@ -85,14 +85,8 @@ class OstKitClient {
         return $json['data']['current_status'];
     }
 
-    public function getUserTokenBalance($uuid) {
-        $users = $this->listUsers(true);
-        foreach ($users as $user) {
-            if ($user['uuid'] == $uuid) {
-                return $user['token_balance'];
-            }
-        }
-        throw new Exception("Unable to get token balance for UUID '$uuid' because it does not exist");
+    public function getUserTokenBalance($uuid, $username) {
+        return $this->editUser($uuid, $username)['token_balance'];
     }
 
     private function get($endpoint, $arguments = array(), $fetchAll) {
