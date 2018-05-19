@@ -49,7 +49,11 @@ class OstKitClient {
     }
 
     public function createTransactionType($name, $kind, $currencyValue, $currencyType = 'BT', $commissionPercent = '0.0') {
-        $json = $this->post('/transaction-types/create', array('name' => $name, 'kind' => $kind, 'currency_type' => $currencyType, 'currency_value' => $currencyValue, 'commission_percent' => $commissionPercent));
+        $params = array('name' => $name, 'kind' => $kind, 'currency_type' => $currencyType, 'currency_value' => $currencyValue);
+        if ($kind == 'user_to_user') {
+            $params['commission_percent'] = $commissionPercent;
+        }
+        $json = $this->post('/transaction-types/create', $params);
         return $json['data']['transactions'][0];
     }
 
