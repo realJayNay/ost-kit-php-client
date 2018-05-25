@@ -1,60 +1,96 @@
 # OST KIT - PHP Wrapper for the OST KIT API
 
-A PHP wrapper for the REST API of [OST KIT](https://kit.ost.com) which is currently under active development. This client implements version 0.9.2 of the [OST KIT REST API](https://dev.ost.com).
+[![Latest Stable Version](https://img.shields.io/packagist/v/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client)
+[![Latest Unstable Version](https://img.shields.io/packagist/vpre/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client)
+[![Total Downloads](https://img.shields.io/packagist/dt/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client)
+	
+A PHP wrapper for the REST API of [OST KIT](https://kit.ost.com) which is currently under active development. This client implements version 1.0 of the [OST KIT REST API](https://dev.ost.com).
+
+Older versions of this plugin can be found in the [releases](https://github.com/realJayNay/ost-kit-php-client/releases) overview.
 
 ![Screenshot](ostkit.png)
 
 A Branded Token economy must be setup first in order to use the API, see https://kit.ost.com for more information.
 
+## Installation
+
+Install the latest version with
+
+```bash
+$ composer require jay-nay/ost-kit-php-client
+```
+
+This package is on [packagist](https://packagist.org/packages/jay-nay/ost-kit-php-client). 
+To get the latest version add the following dependency to your ```composer.json```.
+
+```
+require": {
+    "jay-nay/ost-kit-php-client": "dev-master"
+}
+```
+
 ## How to use the client
 
 Create the OST KIT client using your Branded Token economy's `API key` and `API secret`.
 ```php
-require('lib/OstKitClient.php');
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Ost\Kit\Php\Client\OstKitClient;
 
 $ost = OstKitClient::create('YOUR-API-KEY', 'YOUR-API-SECRET');
 
+// Create a user named 'Louise',
+$user = $ost->createUser('Louise');
 
-/* USERS functions */
-// Create a user named 'Ria'.
-$user = $ost->createUser('Ria');
+// ... and rename her to 'Liza'.
+$user = $ost->updateUser($user['id'], 'Liza');
 
-// ... and rename 'Ria' to 'Fred'.
-$user = $ost->editUser($user['uuid'], 'Fred');
+// Get information about a specific user, including its public address and token balance.
+$user = $ost->getUser($user['id']);
 
-// List users. Either the first 25 of the result set, or optionally fetch all users by recursively consuming all result set pages.
-$firstUsers = $ost->listUsers(); // lists first page of 25 users
-$users = $ost->listUsers(true); // lists all users
+// List all users.
+$users = $ost->listUsers(true);
 
+// Create a user-to-user action that transfers an arbitrary amount of Branded Tokens to a user.
+$action = $ost->createAction('BT fund transfer3', 'user_to_user', 'BT', null, 0.0);
 
-/* TRANSACTION TYPES functions */
-// Create a transaction type.
-$transactionType = $ost->createTransactionType('Clap', 'user_to_user', 1); // user_to_user transaction of 1 BT named 'Clap'
+// Update an action, the kind of an action is specified when it is created an cannot change.
+// Change the action currency to 'USD', amount is still arbitrary and a commission of 1.5 percent will be charged.
+// Commission charges can only be specified for user-to-user actions.
+$action = $ost->updateAction($action['id'], null, $action['kind'], 'USD', null, 1.5);
 
-// List transaction types.
-$transactionTypes = $ost->listTransactionTypes(true); // lists all transaction types
+// Get information about a specific action.
+$action = $ost->getAction($action['id']);
 
-// Execute a transaction type. This transfers a preconfigured amount of Branded Tokens from a user or company to another user or company.
-$transaction = $ost->executeTransactionType($fromUuid, $toUuid, 'Clap');
+// Lists some actions.
+$actions = $ost->listActions(false);
 
-// ... and retrieve the status of the transaction. Allow the transaction some time to get processed on the OpenST utility chains. 
-$status = $ost->getTransactionStatus($transaction['transaction_uuid']);
+// Execute an action.
+$transaction = $ost->executeAction($action['id'], '2e6c0d8f-29b0-41fe-b7c0-83d9eb043fe1', '6c17aca7-9911-4dc0-8aa6-30dedae4d73d', 1);
 
+// Get the information of an executed transaction.
+$transaction = $ost->getTransaction($transaction['id']);
 
-/* AIRDROP functions */
-// Airdrop tokens either to all users or only to the users that have never been airdropped before.
-$aidropUuid = $ost->airdrop(1, 'all'); // airdrop 1 token to all users
+// List some transactions for the users in the array.
+$transactions = $ost->listTransactions(false, array('id' => array('4e84c205-7da4-4547-b400-fa40e979227b')));
 
-// Retrieve the status of the airdrop. 
-$airdropStatus = $ost->getAirdropStatus($airdropUuid);
+// Transfer some OST⍺ Prime (in Wei).
+$transfer = $ost->transfer('0x495ed9A80b429C4A1eA678988ffBE5685D64fF99', 1);
 
+// Retrieve a transfer.
+$transfer = $ost->getTransfer('4073cd70-e4b8-44e9-96ad-871dd8c1e70f');
 
-/* NON-API functions */
+// List all transfers
+$tansfers = $ost->listTransfers(true);
 
-// Retrieve a single user's token balance. 
-//This is not implemented by the OST KIT API, but is done via a workaround by renaming a user to its own username to get the user info.
-$tokenBalance = $ost->getUserTokenBalance($user['uuid'], $user['name']);
+// more examples to come; have a look at the phpdoc in the meanwhile :)
 ```
+
+## Using the library via packagist
+
+This client is also available via [packagist](https://packagist.org/packages/jay-nay/ost-kit-php-client). 
+See [here](https://getcomposer.org/doc/00-intro.md) for an introduction on how to manage dependencies via ```composer.json```.
 
 ## OST KIT PHP Client Roadmap
 
@@ -62,10 +98,10 @@ Some things to do, and ideas for potential features:
 
 * Improve the **performance** of the web client by making asynchronous, multi-threaded web calls.
 * Improve the **efficiency** of the web client by fully supporting arrays as input type.
-* Automatically derive which JSON sub-array to return based on the `result_type` attribute of the web response.
-* Fully document the API and all function parameters and return types.
-* Automatically assign the _company_ as debtor in `company_to_user` and as creditor in `user_to_company` transaction types.
-* Implement the retrieval of a users's _wallet address_ based on its `UUID` in OST KIT, so it can be view directly in [OST View](https://view.ost.com).
+* ~~Automatically derive which JSON sub-array to return based on the `result_type` attribute of the web response.~~
+* ~~Fully document the API and all function parameters and return types.~~
+* ~~Automatically assign the _company_ as debtor in `company_to_user` and as creditor in `user_to_company` transaction types.~~
+* ~~Implement the retrieval of a users's _wallet address_ based on its `UUID` in OST KIT, so it can be view directly in [OST View](https://view.ost.com).~~
 
 ## Questions, feature requests and bug reports
 If you have questions, have a great idea for the client or ran into issues using this client: please report them in the project's [Issues](https://github.com/realJayNay/ost-kit-php-client/issues) area.  
