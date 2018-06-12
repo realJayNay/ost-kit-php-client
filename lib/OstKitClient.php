@@ -4,6 +4,7 @@ namespace Ost\Kit\Php\Client;
 
 use Exception;
 use InvalidArgumentException;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 /**
@@ -26,6 +27,7 @@ class OstKitClient {
      * @param string $apiSecret OST KIT API secret (mandatory)
      * @param string $baseUrl OST REST base URL
      * @return OstKitClient
+     * @throws Exception when initialization fails
      */
     public static function create($apiKey, $apiSecret, $baseUrl = 'https://sandboxapi.ost.com/v1') {
         if (!isset($apiKey) || !isset($apiSecret)) {
@@ -39,12 +41,22 @@ class OstKitClient {
         return $ost;
     }
 
-    private function __construct($apiKey, $apiSecret, $baseUrl, ...$caches) {
+    protected function __construct($apiKey, $apiSecret, $baseUrl, ...$caches) {
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
         $this->baseUrl = $baseUrl;
         $this->cache = array_fill_keys($caches, array());
         $this->log = new Logger('OstKitClient');
+        try {
+            $this->log->pushHandler(
+                new StreamHandler('php://stderr', Logger::WARNING)
+            );
+            $this->log->pushHandler(
+                new StreamHandler('php://stdout', Logger::DEBUG)
+            );
+        } catch (Exception $ignored) {
+            $this->log->warn('Unable to set stream handlers for stderr and stdout. Falling back to default monolog configuration.');
+        }
     }
 
     private function init() {
@@ -415,9 +427,7 @@ class OstKitClient {
      * @throws Exception when the HTTP call is unsuccessful
      */
     public function transfer($toAddress, $amount) {
-        if (!isset($toAddress)) {
-            throw new InvalidArgumentException('To Address is mandatory.');
-        }
+        self::validateIsset($toAddress, 'To Address');
         self::validateNumber($amount, 0, 10 ^ 20 - 1);
         $transfer = $this->post('/transfers', array('to_address' => $toAddress, 'amount' => $amount));
         $this->log->debug('Created OST⍺ Prime transfer', $transfer);
@@ -469,7 +479,7 @@ class OstKitClient {
         return $json['data']['price_points'];
     }
 
-    private function get($endpoint, $fetchAll, $arguments = array(), $extractResultType = true) {
+    protected function get($endpoint, $fetchAll, $arguments = array(), $extractResultType = true) {
         if ($fetchAll && isset($arguments['limit'])) {
             $arguments['limit'] = 100; // increase limit to max for fetch-all
         }
@@ -508,7 +518,7 @@ class OstKitClient {
         return $extractResultType ? $this->extractResultType($jsonArray) : $jsonArray;
     }
 
-    private function post($endpoint, $arguments = array(), $extractResultType = true) {
+    protected function post($endpoint, $arguments = array(), $extractResultType = true) {
         $arguments['api_key'] = $this->apiKey;
         $arguments['request_timestamp'] = time();
         ksort($arguments);
@@ -565,8 +575,8 @@ class OstKitClient {
     }
 
     private static function validateName($name, $nameRequired = true, $min = 3, $max = 20, $regex = '/^[a-zA-Z0-9 ]+$/') {
-        if ($nameRequired && !isset($name)) {
-            throw new InvalidArgumentException('Name is mandatory.');
+        if ($nameRequired) {
+            self::validateIsset($name, 'Name');
         }
         if (isset($name)) {
             if (strlen($name) < $min || strlen($name) > $max || !preg_match($regex, $name) == 1) {
@@ -577,20 +587,18 @@ class OstKitClient {
     }
 
     private static function validateKind($kind) {
-        if (!isset($kind) || !($kind == 'user_to_user' || $kind == 'company_to_user' || $kind == 'user_to_company')) {
-            throw new InvalidArgumentException("An action can be one of three kinds: 'user_to_user', 'company_to_user', or 'user_to_company'.");
-        }
+        return self::validateOneOf($kind, 'Action Kind', 'user_to_user', 'company_to_user', 'user_to_company');
     }
 
     private static function validateAmount($amount, $currency, $amountRequired = true, $currencyRequired = true) {
-        if ($currencyRequired && !isset($currency)) {
-            throw new InvalidArgumentException('Currency is mandatory.');
+        if ($currencyRequired) {
+            self::validateIsset($currency, 'Currency');
         }
-        if ($amountRequired && !isset($amount)) {
-            throw new InvalidArgumentException('Amount is mandatory.');
+        if ($amountRequired) {
+            self::validateIsset($amount, 'Amount');
         }
-        if (isset($currency) && !($currency == 'BT' || $currency == 'USD')) {
-            throw new InvalidArgumentException("Currency has an invalid value: $currency. Possible values for currency are 'USD' (fixed) or 'BT' (floating).");
+        if (isset($currency)) {
+            self::validateOneOf($currency, 'Currency', 'BT', 'USD');
         }
         if (isset($amount)) {
             $min = 0;
@@ -607,8 +615,8 @@ class OstKitClient {
     }
 
     private static function validateNumber($number, $min, $max = 100, $required = true) {
-        if ($required && !isset($number)) {
-            throw new InvalidArgumentException('Number value is mandatory.');
+        if ($required) {
+            self::validateIsset($number, 'Number');
         }
         if (isset($number) && ($number < $min || $number > $max)) {
             throw new InvalidArgumentException("Number value must be between $min and $max.");
@@ -617,8 +625,24 @@ class OstKitClient {
     }
 
     private static function validateId($id) {
-        if (!isset($id)) {
-            throw new InvalidArgumentException('ID is required.');
+        return self::validateIsset($id, 'ID');
+    }
+
+    private static function validateIsset($ref, $subject = 'ID') {
+        if (!isset($ref)) {
+            throw new InvalidArgumentException("$subject is mandatory.");
         }
+        return true;
+    }
+
+    private static function validateOneOf($input, $subject, ...$values) {
+        if (isset($input)) {
+            foreach ($values as $value) {
+                if (strcmp($input, $value) == 0) {
+                    return true;
+                }
+            }
+        }
+        throw new InvalidArgumentException("$subject has an invalid value '$input'. Possible values are: $values.");
     }
 }

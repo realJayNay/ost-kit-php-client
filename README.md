@@ -1,8 +1,9 @@
 # OST KIT - PHP Wrapper for the OST KIT API
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client)
-[![Latest Unstable Version](https://img.shields.io/packagist/vpre/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client)
-[![Total Downloads](https://img.shields.io/packagist/dt/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client)
+[![Latest Stable Version](https://img.shields.io/packagist/v/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client#v0.9.2)
+[![Latest Unstable Version](https://img.shields.io/packagist/vpre/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client#dev-master)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/)
+[![Build Status](https://travis-ci.org/realJayNay/ost-kit-php-client.svg?branch=master)](https://travis-ci.org/realJayNay/ost-kit-php-client)
 	
 A PHP wrapper for the REST API of [OST KIT](https://kit.ost.com) which is currently under active development. This client implements version 1.0 of the [OST KIT REST API](https://dev.ost.com).
 
@@ -97,7 +98,7 @@ See [here](https://getcomposer.org/doc/00-intro.md) for an introduction on how t
 Some things to do, and ideas for potential features:
 
 * Improve the **performance** of the web client by making asynchronous, multi-threaded web calls.
-* Improve the **efficiency** of the web client by fully supporting arrays as input type.
+* Improve the **efficiency** of the web client by fully supporting arrays as input type where applicable.
 * ~~Automatically derive which JSON sub-array to return based on the `result_type` attribute of the web response.~~
 * ~~Fully document the API and all function parameters and return types.~~
 * ~~Automatically assign the _company_ as debtor in `company_to_user` and as creditor in `user_to_company` transaction types.~~
