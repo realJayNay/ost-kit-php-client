@@ -26,22 +26,24 @@ class OstKitClient {
      * @param string $apiKey OST API key (mandatory)
      * @param string $apiSecret OST KIT API secret (mandatory)
      * @param string $baseUrl OST REST base URL
+     * @param bool $debug Enable debug logging to php://stdout (defaults to true)
      * @return OstKitClient
+     * @throws InvalidArgumentException when API key, API secret and/or Base URL is missing
      * @throws Exception when initialization fails
      */
-    public static function create($apiKey, $apiSecret, $baseUrl = 'https://sandboxapi.ost.com/v1') {
+    public static function create($apiKey, $apiSecret, $baseUrl = 'https://sandboxapi.ost.com/v1', $debug = true) {
         if (!isset($apiKey) || !isset($apiSecret)) {
             throw new InvalidArgumentException('API Key and API Secret are mandatory.');
         }
         if (!isset($baseUrl)) {
             throw new InvalidArgumentException('Base URL is mandatory.');
         }
-        $ost = new OstKitClient($apiKey, $apiSecret, $baseUrl, 'user');
+        $ost = new OstKitClient($apiKey, $apiSecret, $baseUrl, $debug,'user');
         $ost->init();
         return $ost;
     }
 
-    protected function __construct($apiKey, $apiSecret, $baseUrl, ...$caches) {
+    protected function __construct($apiKey, $apiSecret, $baseUrl, $debug, ...$caches) {
         $this->apiKey = $apiKey;
         $this->apiSecret = $apiSecret;
         $this->baseUrl = $baseUrl;
@@ -51,9 +53,11 @@ class OstKitClient {
             $this->log->pushHandler(
                 new StreamHandler('php://stderr', Logger::WARNING)
             );
-            $this->log->pushHandler(
-                new StreamHandler('php://stdout', Logger::DEBUG)
-            );
+            if ($debug) {
+                $this->log->pushHandler(
+                    new StreamHandler('php://stdout', Logger::DEBUG)
+                );
+            }
         } catch (Exception $ignored) {
             $this->log->warn('Unable to set stream handlers for stderr and stdout. Falling back to default monolog configuration.');
         }
@@ -69,7 +73,7 @@ class OstKitClient {
     /**
      * Create a user with the given name.
      *
-     * @param $name string User Name (mandatory, not unique) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
+     * @param string $name User Name (mandatory, not unique) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
      * @return array decoded JSON array of the 'user' result type
      * @throws InvalidArgumentException when the ID is missing or the Name does not pass validation
      * @throws Exception when the HTTP call is unsuccessful
@@ -84,8 +88,8 @@ class OstKitClient {
     /**
      * Rename an existing user.
      *
-     * @param $id string User ID (mandatory)
-     * @param $name string User Name (mandatory) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
+     * @param string $id User ID (mandatory)
+     * @param string $name User Name (mandatory) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
      * @return array decoded JSON array of the updated 'user' result type
      * @throws InvalidArgumentException when the ID is missing or the Name does not pass validation
      * @throws Exception when the HTTP call is unsuccessful
@@ -101,7 +105,7 @@ class OstKitClient {
     /**
      * Retrieve an existing user.
      *
-     * @param $id string User ID (mandatory)
+     * @param string $id User ID (mandatory)
      * @return array decoded JSON array of the updated 'user' result type
      * @throws InvalidArgumentException when the ID is missing or the Name does not pass validation
      * @throws Exception when the HTTP call is unsuccessful
@@ -218,7 +222,7 @@ class OstKitClient {
     /**
      * Retrieve an existing action.
      *
-     * @param $id string Action ID (mandatory)
+     * @param string $id Action ID (mandatory)
      * @return array decoded JSON array of the updated 'action' result type
      * @throws InvalidArgumentException when the ID is missing
      * @throws Exception when the HTTP call is unsuccessful
