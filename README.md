@@ -4,6 +4,7 @@
 [![Latest Unstable Version](https://img.shields.io/packagist/vpre/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client#dev-master)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/)
 [![Build Status](https://travis-ci.org/realJayNay/ost-kit-php-client.svg?branch=master)](https://travis-ci.org/realJayNay/ost-kit-php-client)
+[![codecov](https://codecov.io/gh/realJayNay/ost-kit-php-client/branch/master/graph/badge.svg)](https://codecov.io/gh/realJayNay/ost-kit-php-client)
 	
 A PHP wrapper for the REST API of [OST KIT](https://kit.ost.com) which is currently under active development. This client implements version 1.0 of the [OST KIT REST API](https://dev.ost.com).
 
@@ -37,7 +38,7 @@ Create the OST KIT client using your Branded Token economy's `API key` and `API 
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Ost\Kit\Php\Client\OstKitClient;
+use ostkit\OstKitClient;
 
 $ost = OstKitClient::create('YOUR-API-KEY', 'YOUR-API-SECRET');
 

@@ -1,89 +1,74 @@
 <?php
 
-namespace Ost\Kit\Php\Client\Test;
+namespace ostkit\test;
 
 use Exception;
-use Ost\Kit\Php\Client\OstKitClient;
+use ostkit\OstKitClient;
 
 /**
  * Class OstKitMock that mocks the POST/GET calls of the OstKitClient for unit testing purposes.
  *
- * @package Ost\Kit\Php\Client\Test
+ * @package ostkit\test
+ * @author Jay Nay
+ * @version 1.0
  */
 class OstKitMock extends OstKitClient {
+    private $services;
     private $users;
 
     function __construct() {
         parent::__construct('DummyApiKey', 'DummySecret', 'https://sandboxapi.ost.com/v1', true);
         $this->users = array();
+        $this->services = array(new UserServiceMock(), new AirdropServiceMock(), new ActionServiceMock(), new TransactionServiceMock(), new TransferServiceMock(), new TokenServiceMock());
     }
 
     protected function post($endpoint, $arguments = array(), $extractResultType = true) {
-        if ($endpoint == '/users') { // create
-            $uuid = self::uuid();
-            $address = self::address();
-            $name = $arguments['name'];
-            $user = json_decode("{
-         \"id\": \"$uuid\",
-         \"addresses\": [
-            [
-               \"1409\",
-               \"$address\"
-            ]
-         ],
-         \"name\": \"$name\",
-         \"airdropped_tokens\": 0,
-         \"token_balance\": 0
-      }", true);
-            $this->users[$uuid] = $user;
-            return $user;
-        } else {
-            if (strpos($endpoint, '/users/') == 0) { // update
-                $uuid = substr($endpoint, strlen('/users/'));
-                $name = $arguments['name'];
-                if (isset($this->users[$uuid])) {
-                    $user = $this->users[$uuid];
-                    $user['name'] = $name;
-                    return $user;
-                }
-                throw new Exception('The requested resource could not be located.');
+        foreach ($this->services as $service) {
+            if ($service->accepts($endpoint)) {
+                return $service->post(self::extractId($endpoint), $arguments);
             }
         }
-        throw new Exception('POST request failed');
+        throw new Exception("POST request failed - unknown endpoint: $endpoint");
     }
 
     protected function get($endpoint, $fetchAll, $arguments = array(), $extractResultType = true) {
-        if ($endpoint == '/users') { // list
-            return $this->users;
-        } else {
-            if (strpos($endpoint, '/users/') == 0) { // retrieve
-                $uuid = substr($endpoint, strlen('/users/'));
-                if (isset($this->users[$uuid])) {
-                    return $this->users[$uuid];
-                } else {
-                    throw new Exception('The requested resource could not be located.');
-                }
+        foreach ($this->services as $service) {
+            if ($service->accepts($endpoint)) {
+                return $service->get(self::extractId($endpoint), $arguments, $fetchAll);
             }
         }
-        throw new Exception('GET request failed');
+        throw new Exception("GET request failed - unknown endpoint: $endpoint");
     }
 
-    private static function address() {
-        if (function_exists('random_bytes')) {
-            try {
+    static function extractId($endpoint) {
+        if (isset($endpoint)) {
+            preg_match('/\/\w+(\/(' . self::UUID_REGEX . ')?)?/', $endpoint, $matches);
+            if (isset($matches[2])) {
+                return $matches[2];
+            }
+            if (isset($matches[1])) {
+                return '';
+            }
+        }
+        return null;
+    }
+
+    static function address() {
+        try {
+            if (function_exists('random_bytes')) {
                 $data = random_bytes(20);
                 return vsprintf('0x%s', str_split(bin2hex($data), 40));
-            } catch (Exception $ignored) {
-                print $ignored->getMessage();
+            } else {
+                $data = array_fill(0, 20, mt_rand(0, 0xffff));
+                return vsprintf('0x%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x', $data);
             }
-        } else {
-            $data = array_fill(0, 20, mt_rand(0, 0xffff));
-            return vsprintf('0x%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x', $data);
+        } catch (Exception $ignored) {
+            print $ignored->getMessage();
         }
-        return '0x9352880A2A4c05c41eC1962980Bb1a0bA4176182';
+        return FALSE;
     }
 
-    private static function uuid() {
+    static function uuid() {
         try {
             if (function_exists('random_bytes')) {
                 $data = random_bytes(16);
@@ -113,8 +98,117 @@ class OstKitMock extends OstKitClient {
             }
         } catch (Exception $ignored) {
             print $ignored->getMessage();
-            return '69cc4fcd-39ca-4499-8948-c402dd83fcd8';
         }
+        return FALSE;
     }
 
+}
+
+abstract class ServiceMock {
+    private $endpoint;
+
+    protected function __construct($endpoint) {
+        $this->endpoint = $endpoint;
+    }
+
+    function accepts($endpoint) {
+        return isset($endpoint) && strpos($endpoint, '/users') == 0;
+    }
+}
+
+class UserServiceMock extends ServiceMock {
+    private $users = array();
+
+    function __construct() {
+        parent::__construct('/users');
+    }
+
+    function get($id, $arguments = array()) {
+        if (isset($id)) { // retrieve
+            if (isset($this->users[$id])) {
+                return $this->users[$id];
+            }
+            throw new Exception('The requested resource could not be located.');
+        } else { // list
+            return $this->users;
+        }
+        throw new Exception('GET request failed');
+    }
+
+    function post($id, $arguments) {
+        if (isset($id)) { // update
+            if (isset($this->users[$id])) {
+                if (isset($this->users[$id])) {
+                    $user = $this->users[$id];
+                    $user['name'] = $arguments['name'];
+                    return $user;
+                }
+                throw new Exception('The requested resource could not be located.');
+            }
+        } else { // create
+            $uuid = OstKitMock::uuid();
+            $address = OstKitMock::address();
+            $name = $arguments['name'];
+            $user = json_decode("{\"id\": \"$uuid\", \"addresses\": [[ \"1409\", \"$address\"]], \"name\": \"$name\", \"airdropped_tokens\": 0, \"token_balance\": 0}", true);
+            $this->users[$uuid] = $user;
+            return $user;
+        }
+        throw new Exception('POST request failed');
+    }
+}
+
+class ActionServiceMock extends ServiceMock {
+    function __construct() {
+        parent::__construct('/actions');
+    }
+}
+
+class AirdropServiceMock extends ServiceMock {
+    function __construct() {
+        parent::__construct('/actions');
+    }
+}
+
+class TransactionServiceMock extends ServiceMock {
+    function __construct() {
+        parent::__construct('/transactions');
+    }
+}
+
+class TransferServiceMock extends ServiceMock {
+    function __construct() {
+        parent::__construct('/transfers');
+    }
+}
+
+class TokenServiceMock extends ServiceMock {
+    function __construct() {
+        parent::__construct('/token');
+    }
+
+    function get() {
+        return '{
+      "company_uuid": "ab95e922-26de-44ec-9e5a-9b832c388113",
+      "name": "Sample Token",
+      "symbol": "SCO",
+      "symbol_icon": "token_icon_1",
+      "conversion_factor": "14.86660",
+      "token_erc20_address": "0x546d41730B98a24F2dCfcdbE15637aD1939Bf38b",
+      "simple_stake_contract_address": "0x54eF67a54d8b77C091B6599F1A462Ec7b4dFc648",
+      "total_supply": "92701.9999941",
+      "ost_utility_balance": [
+        [
+          "1409",
+          "87.982677084999999996"
+        ]
+      ]
+    },
+    "price_points": {
+      "OST": {
+        "USD": "0.177892"
+      }
+    }
+  }
+}';
+    }
 }

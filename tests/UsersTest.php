@@ -1,6 +1,7 @@
 <?php
 
-use Ost\Kit\Php\Client\Test\OstKitMock;
+namespace ostkit\test;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,6 +15,9 @@ class UsersTest extends TestCase {
         $this->ost = new OstKitMock();
     }
 
+    /**
+     * @covers OstKitClient::createUser
+     */
     public function testCreateUser() {
         $name = 'Freddy';
         $user = $this->ost->createUser($name);
@@ -22,6 +26,7 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::createUser
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Name is mandatory.
      */
@@ -30,6 +35,7 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::createUser
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Name must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
      */
@@ -38,6 +44,7 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::createUser
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Name must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
      */
@@ -46,6 +53,7 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::createUser
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Name must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
      */
@@ -53,6 +61,9 @@ class UsersTest extends TestCase {
         $this->ost->createUser('012345678901234567_/');
     }
 
+    /**
+     * @covers OstKitClient::updateUser
+     */
     public function testUpdateUser() {
         $olga = $this->ost->createUser('Olga');
         self::assertNotNull($olga, 'Internal disturbance in the force? - valid user should not be null.');
@@ -64,6 +75,7 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::updateUser
      * @@expectedException InvalidArgumentException
      * @expectedExceptionMessage ID is mandatory.
      */
@@ -72,6 +84,7 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::updateUser
      * @@expectedException InvalidArgumentException
      * @expectedExceptionMessage Name is mandatory.
      */
@@ -82,6 +95,7 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::updateUser
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Name must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
      */
@@ -92,6 +106,7 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::updateUser
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Name must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
      */
@@ -102,6 +117,7 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::updateUser
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Name must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
      */
@@ -110,13 +126,17 @@ class UsersTest extends TestCase {
     }
 
     /**
+     * @covers OstKitClient::updateUser
      * @@expectedException Exception
-     * @expectedExceptionMessage The requested resource could not be located.
+     * @expectedExceptionMessage ID '' is not a valid UUID.
      */
     public function testUpdateUserNonExistent() {
         $this->ost->updateUser('', 'name');
     }
 
+    /**
+     * @covers OstKitClient::getUser
+     */
     public function testGetUser() {
         $user = $this->ost->createUser('Federica');
         self::assertNotNull($user, 'Internal disturbance in the force? - valid user should not be null.');
@@ -126,6 +146,9 @@ class UsersTest extends TestCase {
         self::assertEquals($user['name'], $retrieved['name'], 'User name should be equal.');
     }
 
+    /**
+     * @covers OstKitClient::listUsers
+     */
     public function testListUsers() {
         self::assertNotNull($this->ost->createUser('Federica'), 'Internal disturbance in the force? - valid user should not be null.');
         self::assertNotNull($this->ost->createUser('Alessia'), 'Internal disturbance in the force? - valid user should not be null.');

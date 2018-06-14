@@ -1,6 +1,6 @@
 <?php
 
-namespace Ost\Kit\Php\Client;
+namespace ostkit;
 
 use Exception;
 use InvalidArgumentException;
@@ -8,7 +8,16 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 /**
- * OST Kit PHP client
+ * PHP wrapper for the OST KIT REST API.
+ *
+ * This class implements all endpoint features of the OST KIT REST API v1.0.
+ *
+ * All API validations are also enforced client-side to provide fail-fast operations without having to wait for the REST call result.
+ *
+ * @package ostkit
+ * @author Jay Nay
+ * @version 1.0
+ * @link
  */
 class OstKitClient {
     private $baseUrl; // OST REST base URL
@@ -19,6 +28,11 @@ class OstKitClient {
 
     private $token;
     private $cache;
+
+    /**
+     * The client uses this regex to validate ID values before even attempting to do a REST call.
+     */
+    const UUID_REGEX = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
 
     /**
      * Static factory for OstKitClient instances. Creates a new OST KIT PHP client using your API key and secret.
@@ -38,7 +52,7 @@ class OstKitClient {
         if (!isset($baseUrl)) {
             throw new InvalidArgumentException('Base URL is mandatory.');
         }
-        $ost = new OstKitClient($apiKey, $apiSecret, $baseUrl, $debug,'user');
+        $ost = new OstKitClient($apiKey, $apiSecret, $baseUrl, $debug, 'user', 'action');
         $ost->init();
         return $ost;
     }
@@ -122,7 +136,7 @@ class OstKitClient {
         if (isset($airdropped)) {
             $params['airdropped'] = $airdropped ? 'true' : 'false';
         }
-        if (isset($filters)) {
+        if (isset($filters)) {     // TODO - implement filtering for user lists
             if (isset($filters['id'])) {
                 $params['optional_filters'] = 'id=' . implode(',', $filters['id']);
             } else {
@@ -244,7 +258,7 @@ class OstKitClient {
         if (isset($airdropped)) {
             $params['airdropped'] = $airdropped ? 'true' : 'false';
         }
-        if (isset($filters)) {
+        if (isset($filters)) { // TODO - implement filtering for action lists
             if (isset($filters['id'])) {
                 $params['optional_filters'] = 'id=' . implode(',', $filters['id']);
             } else {
@@ -363,7 +377,7 @@ class OstKitClient {
 
     public function listTransactions($fetchAll = false, $filters = array(), $page = 1, $order = 'desc', $limit = 100) {
         $params = array('page_no' => $page, 'order' => $order, 'limit' => $limit);
-        if (isset($filters) && isset($filters['id'])) {
+        if (isset($filters) && isset($filters['id'])) {     // TODO - implement filtering for transaction lists
             $params['optional_filters'] = 'id=' . implode(',', $filters['id']);
             $this->log->debug('Imploded optional_filters to ' . $params['optional_filters']);
         }
@@ -416,9 +430,9 @@ class OstKitClient {
     }
 
     public function listAirdrops($fetchAll = false, $page = 1, $filter = 'all', $orderBy = 'created', $order = 'desc', $limit = 10, $optionalFilters = '') {
-        $users = $this->get('/users', $fetchAll, array('page_no' => $page, 'filter' => $filter, 'order_by' => $orderBy, 'order' => $order, 'limit' => $limit, 'optional_filters' => $optionalFilters));
-        $this->log->debug("Listed users", $users);
-        return $users;
+        $airdrops = $this->get('/airdrops', $fetchAll, array('page_no' => $page, 'filter' => $filter, 'order_by' => $orderBy, 'order' => $order, 'limit' => $limit, 'optional_filters' => $optionalFilters));
+        $this->log->debug("Listed airdrops", $airdrops); // TODO - implement filtering for airdrop lists
+        return $airdrops;
     }
 
     /**
@@ -460,9 +474,11 @@ class OstKitClient {
     }
 
     /**
-     * Retrieves the Branded Token details.
+     * Retrieves the Branded Token {@link https://dev.ost.com/docs/api_token.html} details.
      *
-     * @return array decoded JSON array of the 'token' result type
+     * Unlike the other methods, this method returns the entire response as a decoded JSON array.
+     *
+     * @return array decoded JSON array of the full response result type
      * @throws Exception
      */
     public function getToken() {
@@ -516,7 +532,7 @@ class OstKitClient {
                 $this->log->debug("fetching page $nextPage");
                 $arguments['page_no'] = $nextPage;
                 $add = $this->get($endpoint, $fetchAll, $arguments);
-                $jsonArray = array_merge_recursive($jsonArray, $add);
+                $jsonArray = array_merge_recursive($jsonArray, $add); // TODO: fix array merge
             }
         }
         return $extractResultType ? $this->extractResultType($jsonArray) : $jsonArray;
@@ -623,16 +639,19 @@ class OstKitClient {
             self::validateIsset($number, 'Number');
         }
         if (isset($number) && ($number < $min || $number > $max)) {
-            throw new InvalidArgumentException("Number value must be between $min and $max.");
+            throw new InvalidArgumentException("Number value $number must be between $min and $max.");
         }
         return true;
     }
 
     private static function validateId($id) {
-        return self::validateIsset($id, 'ID');
+        self::validateIsset($id, 'ID');
+        if (!preg_match('/' . self::UUID_REGEX . '/', $id)) {
+            throw new InvalidArgumentException("ID '$id' is not a valid UUID.");
+        }
     }
 
-    private static function validateIsset($ref, $subject = 'ID') {
+    private static function validateIsset($ref, $subject) {
         if (!isset($ref)) {
             throw new InvalidArgumentException("$subject is mandatory.");
         }
@@ -647,6 +666,6 @@ class OstKitClient {
                 }
             }
         }
-        throw new InvalidArgumentException("$subject has an invalid value '$input'. Possible values are: $values.");
+        throw new InvalidArgumentException("$subject '$input' has an invalid value. Possible values are: $values.");
     }
 }
