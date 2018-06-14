@@ -5,4 +5,20 @@ php:
   - 7.1
 
 install:
-  - composer install --no-interaction
+- composer install --no-interaction --prefer-source
+
+after_success:
+- bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  verbose: true
+  local-dir: target/api
+  on:
+    branch: master
+
+git:
+  depth: 1

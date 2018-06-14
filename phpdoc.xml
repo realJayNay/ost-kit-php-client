@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <parser>
+        <target>target/api-cache</target>
+        <markers>
+            <item>TODO</item>
+        </markers>
+    </parser>
+    <transformer>
+        <target>target/api</target>
+    </transformer>
+    <files>
+        <directory>lib</directory>
+    </files>
+    <plugins>
+        <plugin path="Core"/>
+    </plugins>
+    <transformations>
+        <template name="clean"/>
+    </transformations>
+</phpdoc>
