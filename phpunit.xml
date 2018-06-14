@@ -3,11 +3,15 @@
          convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true"
          processIsolation="false" stopOnFailure="false" syntaxCheck="true">
     <testsuites>
-        <testsuite name="Mocked tests">
+        <testsuite name="units">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">lib</directory>
+        </whitelist>
+    </filter>
     <logging>
         <log type="coverage-clover" target="target/clover.xml"/>
     </logging>
