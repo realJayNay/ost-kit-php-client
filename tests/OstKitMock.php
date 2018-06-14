@@ -5,36 +5,82 @@ namespace Ost\Kit\Php\Client\Test;
 use Exception;
 use Ost\Kit\Php\Client\OstKitClient;
 
+/**
+ * Class OstKitMock that mocks the POST/GET calls of the OstKitClient for unit testing purposes.
+ *
+ * @package Ost\Kit\Php\Client\Test
+ */
 class OstKitMock extends OstKitClient {
     private $users;
 
-    public function createUser($name) {
-        parent::createUser($name);
-        $uuid = self::uuid();
-        $user = json_decode("{
+    function __construct() {
+        parent::__construct('DummyApiKey', 'DummySecret', 'https://sandboxapi.ost.com/v1', true);
+        $this->users = array();
+    }
+
+    protected function post($endpoint, $arguments = array(), $extractResultType = true) {
+        if ($endpoint == '/users') { // create
+            $uuid = self::uuid();
+            $address = self::address();
+            $name = $arguments['name'];
+            $user = json_decode("{
          \"id\": \"$uuid\",
          \"addresses\": [
             [
                \"1409\",
-               \"0x9352880A2A4c05c41eC1962980Bb1a0bA4176182\"
+               \"$address\"
             ]
          ],
          \"name\": \"$name\",
          \"airdropped_tokens\": 0,
          \"token_balance\": 0
       }", true);
-        $this->users[$uuid] = $user;
-        return $user;
+            $this->users[$uuid] = $user;
+            return $user;
+        } else {
+            if (strpos($endpoint, '/users/') == 0) { // update
+                $uuid = substr($endpoint, strlen('/users/'));
+                $name = $arguments['name'];
+                if (isset($this->users[$uuid])) {
+                    $user = $this->users[$uuid];
+                    $user['name'] = $name;
+                    return $user;
+                }
+                throw new Exception('The requested resource could not be located.');
+            }
+        }
+        throw new Exception('POST request failed');
     }
 
-    public function updateUser($id, $name) {
-        parent::updateUser($id, $name);
-        if (isset($this->users[$id])) {
-            $user = $this->users[$id];
-            $user['name'] = $name;
-            return $user;
+    protected function get($endpoint, $fetchAll, $arguments = array(), $extractResultType = true) {
+        if ($endpoint == '/users') { // list
+            return $this->users;
+        } else {
+            if (strpos($endpoint, '/users/') == 0) { // retrieve
+                $uuid = substr($endpoint, strlen('/users/'));
+                if (isset($this->users[$uuid])) {
+                    return $this->users[$uuid];
+                } else {
+                    throw new Exception('The requested resource could not be located.');
+                }
+            }
         }
-        throw new Exception('The requested resource could not be located.');
+        throw new Exception('GET request failed');
+    }
+
+    private static function address() {
+        if (function_exists('random_bytes')) {
+            try {
+                $data = random_bytes(20);
+                return vsprintf('0x%s', str_split(bin2hex($data), 40));
+            } catch (Exception $ignored) {
+                print $ignored->getMessage();
+            }
+        } else {
+            $data = array_fill(0, 20, mt_rand(0, 0xffff));
+            return vsprintf('0x%04x%04x%04x%04x%04x%04x%04x%04x%04x%04x', $data);
+        }
+        return '0x9352880A2A4c05c41eC1962980Bb1a0bA4176182';
     }
 
     private static function uuid() {
@@ -69,64 +115,6 @@ class OstKitMock extends OstKitClient {
             print $ignored->getMessage();
             return '69cc4fcd-39ca-4499-8948-c402dd83fcd8';
         }
-    }
-
-    function __construct() {
-        parent::__construct('DummyApiKey', 'DummySecret', 'https://sandboxapi.ost.com/v1', true);
-        $this->users = array();
-    }
-
-    protected function post($endpoint, $arguments = array(), $extractResultType = true) {
-        if ($endpoint == '/users') { // create
-            $uuid = self::uuid();
-            $name = $arguments['name'];
-            return json_decode("{
-         \"id\": \"$uuid\",
-         \"addresses\": [
-            [
-               \"1409\",
-               \"0x9352880A2A4c05c41eC1962980Bb1a0bA4176182\"
-            ]
-         ],
-         \"name\": \"$name\",
-         \"airdropped_tokens\": 0,
-         \"token_balance\": 0
-      }", true);
-        } else {
-            if (strpos($endpoint, '/users/') == 0) { // update
-                $uuid = substr($endpoint, strlen('/users/'));
-                $name = $arguments['name'];
-                return json_decode("{
-         \"id\": \"$uuid\",
-         \"addresses\": [
-            [
-               \"1409\",
-               \"0x9352880A2A4c05c41eC1962980Bb1a0bA4176182\"
-            ]
-         ],
-         \"name\": \"$name\",
-         \"airdropped_tokens\": 0,
-         \"token_balance\": 0
-      }", true);
-            }
-        }
-        throw new Exception('POST request failed');
-    }
-
-    protected function get($endpoint, $fetchAll, $arguments = array(), $extractResultType = true) {
-        if ($endpoint == '/users') { // list
-            return $this->users;
-        } else {
-            if (strpos($endpoint, '/users/') == 0) { // retrieve
-                $uuid = substr($endpoint, strlen('/users/'));
-                if (isset($this->users[$uuid])) {
-                    return $this->users[$uuid];
-                } else {
-                    throw new Exception('The requested resource could not be located.');
-                }
-            }
-        }
-        throw new Exception('GET request failed');
     }
 
 }
