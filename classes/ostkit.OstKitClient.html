@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src').replace( /\\/g, '/');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/ostkit.html">\ostkit</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">89</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">5</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1049062558"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1049062558" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1650768069"></a>
+                                <a href="../namespaces/ostkit.html" style="margin-left: 30px; padding-left: 0">ostkit</a>
+            </div>
+            <div id="namespace-1650768069" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/ostkit.OstKitClient.html">OstKitClient</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/ostkit.html">\ostkit</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\ostkit</small>OstKitClient</h1>
+                    <p><em>PHP wrapper for the OST KIT REST API.</em></p>
+                    <p>This class implements all endpoint features of the OST KIT REST API v1.0.</p>
+<p>All API validations are also enforced client-side to provide fail-fast operations without having to wait for the REST call result.</p>
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_create" class="">create()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_createUser" class="">createUser()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_updateUser" class="">updateUser()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_getUser" class="">getUser()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_listUsers" class="">listUsers()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_createAction" class="">createAction()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_updateAction" class="">updateAction()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_getAction" class="">getAction()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_listActions" class="">listActions()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_executeCompanyAction" class="">executeCompanyAction()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_executeAction" class="">executeAction()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_getTransaction" class="">getTransaction()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_listTransactions" class="">listTransactions()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_airdrop" class="">airdrop()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_getAirdrop" class="">getAirdrop()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_listAirdrops" class="">listAirdrops()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_transfer" class="">transfer()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_getTransfer" class="">getTransfer()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_listTransfers" class="">listTransfers()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_getToken" class="">getToken()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_getOstPricePoints" class="">getOstPricePoints()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/ostkit.OstKitClient.html#constant_UUID_REGEX" class="">UUID_REGEX</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_get" class="">get()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_post" class="">post()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_init" class="">init()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_extractResultType" class="">extractResultType()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_validateName" class="">validateName()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_validateKind" class="">validateKind()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_validateAmount" class="">validateAmount()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_validateNumber" class="">validateNumber()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_validateId" class="">validateId()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_validateIsset" class="">validateIsset()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_validateOneOf" class="">validateOneOf()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/ostkit.OstKitClient.html#property_baseUrl" class="">$baseUrl</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#property_apiKey" class="">$apiKey</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#property_apiSecret" class="">$apiSecret</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#property_log" class="">$log</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#property_token" class="">$token</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#property_cache" class="">$cache</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/OstKitClient.html"><div class="path-wrapper">OstKitClient.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">ostkit</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\ostkit\OstKitClient</div>
+                            </dd>
+
+                        
+                        
+                        
+                                                                            <dt>See also</dt>
+                                                                                        <dd><a href=""><span class="namespace-wrapper"></span></a></dd>
+                                                                            
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr>
+                            <th>
+                                author
+                            </th>
+                            <td>
+                                                                                                        <p>Jay Nay</p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                version
+                            </th>
+                            <td>
+                                                                    1.0                                    
+                                                            </td>
+                        </tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_UUID_REGEX" name="constant_UUID_REGEX" class="anchor"></a>
+            <article id="constant_UUID_REGEX" class="constant">
+                <h3 class="">UUID_REGEX</h3>
+                <pre class="signature">UUID_REGEX = &#039;[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}&#039;</pre>
+                <p><em>The client uses this regex to validate ID values before even attempting to do a REST call.</em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_baseUrl" name="property_baseUrl" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$baseUrl</h3>
+                <pre class="signature">$baseUrl : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_apiKey" name="property_apiKey" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$apiKey</h3>
+                <pre class="signature">$apiKey : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_apiSecret" name="property_apiSecret" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$apiSecret</h3>
+                <pre class="signature">$apiSecret : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_log" name="property_log" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$log</h3>
+                <pre class="signature">$log : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_token" name="property_token" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$token</h3>
+                <pre class="signature">$token : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_cache" name="property_cache" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$cache</h3>
+                <pre class="signature">$cache : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_create" name="method_create" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">create()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">create(string  <span class="argument">$apiKey</span>, string  <span class="argument">$apiSecret</span>, string  <span class="argument">$baseUrl = &#039;https://sandboxapi.ost.com/v1&#039;</span>, boolean  <span class="argument">$debug = true</span>) : \ostkit\OstKitClient</pre>
+                <p><em>Static factory for OstKitClient instances. Creates a new OST KIT PHP client using your API key and secret.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$apiKey </td>
+                                <td><p>OST API key (mandatory)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$apiSecret </td>
+                                <td><p>OST KIT API secret (mandatory)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$baseUrl </td>
+                                <td><p>OST REST base URL</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$debug </td>
+                                <td><p>Enable debug logging to php://stdout (defaults to true)</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when API key, API secret and/or Base URL is missing</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when initialization fails</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    <a href="../classes/ostkit.OstKitClient.html">\ostkit\OstKitClient</a>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createUser" name="method_createUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createUser(string  <span class="argument">$name</span>) : array</pre>
+                <p><em>Create a user with the given name.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>User Name (mandatory, not unique) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the ID is missing or the Name does not pass validation</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the 'user' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateUser" name="method_updateUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateUser(string  <span class="argument">$id</span>, string  <span class="argument">$name</span>) : array</pre>
+                <p><em>Rename an existing user.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$id </td>
+                                <td><p>User ID (mandatory)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>User Name (mandatory) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the ID is missing or the Name does not pass validation</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the updated 'user' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getUser" name="method_getUser" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getUser()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getUser(string  <span class="argument">$id</span>) : array</pre>
+                <p><em>Retrieve an existing user.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$id </td>
+                                <td><p>User ID (mandatory)</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the ID is missing or the Name does not pass validation</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the updated 'user' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_listUsers" name="method_listUsers" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">listUsers()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">listUsers(  <span class="argument">$fetchAll = false</span>,   <span class="argument">$filters = array()</span>,   <span class="argument">$page = 1</span>,   <span class="argument">$airdropped = null</span>,   <span class="argument">$orderBy = &#039;created&#039;</span>,   <span class="argument">$order = &#039;desc&#039;</span>,   <span class="argument">$limit = 100</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$fetchAll </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$filters </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$airdropped </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$orderBy </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$order </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$limit </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createAction" name="method_createAction" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">createAction()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createAction(string  <span class="argument">$name</span>, string  <span class="argument">$kind</span>, string  <span class="argument">$currency = &#039;BT&#039;</span>, double  <span class="argument">$amount = null</span>, double  <span class="argument">$commissionPercent = null</span>) : array</pre>
+                <p><em>Create an action.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Unique Name (mandatory, unique) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$kind </td>
+                                <td><p>Kind (mandatory) - must be one of 'company_to_user', 'user_to_company' or 'user_to_user'</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$currency </td>
+                                <td><p>Currency (mandatory) - either 'USD' (fixed) or 'BT' (floating)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>double</td>
+                                <td>$amount </td>
+                                <td><p>Amount - 0.00001 to 100 for 'BT' or 0.01 to 100 for 'USD' - null makes the action accept arbitrary amounts</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>double</td>
+                                <td>$commissionPercent </td>
+                                <td><p>Commission Fee (only for 'user_to_user' actions) - percentage inclusive in the amount - 0 to 100  - null makes this action accept arbitrary commissions</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the input parameters do not pass validation</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the updated 'action' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateAction" name="method_updateAction" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateAction()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateAction(string  <span class="argument">$id</span>, string  <span class="argument">$name = null</span>, string  <span class="argument">$kind = null</span>, string  <span class="argument">$currency = null</span>, double|null  <span class="argument">$amount = null</span>, double|null  <span class="argument">$commissionPercent = null</span>) : array</pre>
+                <p><em>Update an existing action.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$id </td>
+                                <td><p>Action ID (mandatory)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td><p>Name (unique) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$kind </td>
+                                <td><p>Kind - cannot be changed after creation - used to validate and add commission percent only for 'user_to_user' actions</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$currency </td>
+                                <td><p>Currency (mandatory) - either 'USD' (fixed) or 'BT' (floating)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>double|null</td>
+                                <td>$amount </td>
+                                <td><p>Amount - 0.00001 to 100 for 'BT' or 0.01 to 100 for 'USD' - null makes the action accept arbitrary amounts</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>double|null</td>
+                                <td>$commissionPercent </td>
+                                <td><p>Commission Fee (only for 'user_to_user' actions) - percentage inclusive in the amount - 0 to 100  - null makes this action accept arbitrary commissions</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the input parameters do not pass validation</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the updated 'action' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getAction" name="method_getAction" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getAction()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getAction(string  <span class="argument">$id</span>) : array</pre>
+                <p><em>Retrieve an existing action.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$id </td>
+                                <td><p>Action ID (mandatory)</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the ID is missing</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the updated 'action' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_listActions" name="method_listActions" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">listActions()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">listActions(  <span class="argument">$fetchAll = false</span>,   <span class="argument">$filters = array()</span>,   <span class="argument">$page = 1</span>,   <span class="argument">$orderBy = &#039;created&#039;</span>,   <span class="argument">$order = &#039;desc&#039;</span>,   <span class="argument">$limit = 100</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$fetchAll </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$filters </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$orderBy </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$order </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$limit </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_executeCompanyAction" name="method_executeCompanyAction" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">executeCompanyAction()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">executeCompanyAction(string  <span class="argument">$id</span>, string  <span class="argument">$userId</span>, double|null  <span class="argument">$amount = null</span>) : array</pre>
+                <p><em>Execute an existing &#039;user_to_company&#039; or &#039;company_to_user&#039; action and automatically assign the company as recipient or sender.</em></p>
+                <p>This method retrieves the action first to:</p>
+<ul>
+<li>decide whether to assign the company as recipient or sender of the action</li>
+<li>validate the amount against the currency of the action</li>
+</ul>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$id </td>
+                                <td><p>Action ID (mandatory)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$userId </td>
+                                <td><p>User ID (mandatory)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>double|null</td>
+                                <td>$amount </td>
+                                <td><p>Amount - 0.00001 to 100 for 'BT' or 0.01 to 100 for 'USD' - null if the amount is preset by the action</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the requested action is 'user_to_user' or the input parameters do not pass validation</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the updated 'transaction' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_executeAction" name="method_executeAction" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">executeAction()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">executeAction(string  <span class="argument">$id</span>, string  <span class="argument">$from</span>, string  <span class="argument">$to</span>, double|null  <span class="argument">$amount = null</span>, double|null  <span class="argument">$commissionPercent = null</span>) : array</pre>
+                <p><em>Execute any existing action.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$id </td>
+                                <td><p>Action ID (mandatory)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$from </td>
+                                <td><p>Sending User ID (mandatory)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$to </td>
+                                <td><p>Receiving User ID (mandatory)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>double|null</td>
+                                <td>$amount </td>
+                                <td><p>Amount - 0.00001 to 100 for 'BT' or 0.01 to 100 for 'USD' - null if the amount is preset by the action</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>double|null</td>
+                                <td>$commissionPercent </td>
+                                <td><p>Commission Fee (only for 'user_to_user' actions) - percentage inclusive in the amount - 0 to 100  - null if the commission percentage is preset by the action</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the input parameters do not pass validation</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the updated 'transaction' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTransaction" name="method_getTransaction" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTransaction()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTransaction(string  <span class="argument">$id</span>) : array</pre>
+                <p><em>Retrieve an existing transaction.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$id </td>
+                                <td><p>Transaction ID (mandatory)</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the ID is missing</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the 'transaction' result type (an additional attribute 'view_url' is added that contains a hyperlink to OST View)</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_listTransactions" name="method_listTransactions" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">listTransactions()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">listTransactions(  <span class="argument">$fetchAll = false</span>,   <span class="argument">$filters = array()</span>,   <span class="argument">$page = 1</span>,   <span class="argument">$order = &#039;desc&#039;</span>,   <span class="argument">$limit = 100</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$fetchAll </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$filters </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$order </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$limit </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_airdrop" name="method_airdrop" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">airdrop()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">airdrop(integer  <span class="argument">$amount</span>, boolean|null  <span class="argument">$airdropped = null</span>, array  <span class="argument">$userIds = array()</span>) : array</pre>
+                <p><em>Execute an airdrop to provide a certain amount of Branded Tokens to a set of users.</em></p>
+                <p>Please note the interdependency between the $airdropped and $userIds parameters.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$amount </td>
+                                <td><p>Number (mandatory) of Branded Tokens to airdrop - must be a positive integer value that is less than the total supply</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>boolean|null</td>
+                                <td>$airdropped </td>
+                                <td><p>Indicates whether to airdrop tokens to end-users who have been airdropped some tokens at least once (true) or to end-users who have never (false) been airdropped tokens or null to omit this filter</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$userIds </td>
+                                <td><p>Array of selected User IDs to airdrop tokens to or null to omit this filter - this filter works on top of the $airdropped filter</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the $amount is missing</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the 'airdrop' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getAirdrop" name="method_getAirdrop" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getAirdrop()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getAirdrop(string  <span class="argument">$id</span>) : array</pre>
+                <p><em>Retrieves a previously scheduled</em></p>
+                <p>Please note the interdependency between the $airdropped and $userIds parameters.</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$id </td>
+                                <td><p>Airdrop ID</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the $amount is missing</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the 'airdrop' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_listAirdrops" name="method_listAirdrops" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">listAirdrops()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">listAirdrops(  <span class="argument">$fetchAll = false</span>,   <span class="argument">$page = 1</span>,   <span class="argument">$filter = &#039;all&#039;</span>,   <span class="argument">$orderBy = &#039;created&#039;</span>,   <span class="argument">$order = &#039;desc&#039;</span>,   <span class="argument">$limit = 10</span>,   <span class="argument">$optionalFilters = &#039;&#039;</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$fetchAll </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$filter </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$orderBy </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$order </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$limit </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$optionalFilters </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_transfer" name="method_transfer" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">transfer()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">transfer(string  <span class="argument">$toAddress</span>, integer  <span class="argument">$amount</span>) : array</pre>
+                <p><em>Transfer an arbitrary amount of OST⍺ Prime to an account outside of your Branded Token economy.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$toAddress </td>
+                                <td><p>Public address (mandatory) to which to transfer OST⍺ Prime</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>integer</td>
+                                <td>$amount </td>
+                                <td><p>Amount (mandatory) of OST⍺ Prime to transfer in Wei - between 0 and 10^20 (exclusive)</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the $amount is missing</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the 'transfer' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTransfer" name="method_getTransfer" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTransfer()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTransfer(string  <span class="argument">$id</span>) : array</pre>
+                <p><em>Retrieves a transfer.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$id </td>
+                                <td><p>Transaction ID</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\InvalidArgumentException</dt>
+                            <dd><p>when the $id is missing</p></dd>
+                                                    <dt>\Exception</dt>
+                            <dd><p>when the HTTP call is unsuccessful</p></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the 'transfer' result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_listTransfers" name="method_listTransfers" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">listTransfers()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">listTransfers(  <span class="argument">$fetchAll = false</span>,   <span class="argument">$page = 1</span>,   <span class="argument">$filter = &#039;all&#039;</span>,   <span class="argument">$orderBy = &#039;created&#039;</span>,   <span class="argument">$order = &#039;desc&#039;</span>,   <span class="argument">$limit = 10</span>,   <span class="argument">$optionalFilters = &#039;&#039;</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$fetchAll </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$page </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$filter </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$orderBy </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$order </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$limit </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$optionalFilters </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getToken" name="method_getToken" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getToken()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getToken() : array</pre>
+                <p><em>Retrieves the Branded Token {@link https://dev.ost.com/docs/api_token.html} details.</em></p>
+                <p>Unlike the other methods, this method returns the entire response as a decoded JSON array.</p>
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array of the full response result type</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getOstPricePoints" name="method_getOstPricePoints" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getOstPricePoints()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getOstPricePoints() : array</pre>
+                <p><em>Retrieves the current USD price of OST.</em></p>
+                
+
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>decoded JSON array fo currency/price pairs (at least 'OST/USD')</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct(  <span class="argument">$apiKey</span>,   <span class="argument">$apiSecret</span>,   <span class="argument">$baseUrl</span>,   <span class="argument">$debug</span>,   <span class="argument">$caches</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$apiKey </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$apiSecret </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$baseUrl </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$debug </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$caches </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_get" name="method_get" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">get()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">get(  <span class="argument">$endpoint</span>,   <span class="argument">$fetchAll</span>,   <span class="argument">$arguments = array()</span>,   <span class="argument">$extractResultType = true</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$endpoint </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$fetchAll </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$arguments </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$extractResultType </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_post" name="method_post" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">post()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">post(  <span class="argument">$endpoint</span>,   <span class="argument">$arguments = array()</span>,   <span class="argument">$extractResultType = true</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$endpoint </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$arguments </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$extractResultType </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_init" name="method_init" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">init()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">init() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_extractResultType" name="method_extractResultType" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">extractResultType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">extractResultType(  <span class="argument">$jsonArray</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$jsonArray </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateName" name="method_validateName" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">validateName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateName(  <span class="argument">$name</span>,   <span class="argument">$nameRequired = true</span>,   <span class="argument">$min = 3</span>,   <span class="argument">$max = 20</span>,   <span class="argument">$regex = &#039;/^[a-zA-Z0-9 ]+$/&#039;</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$name </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$nameRequired </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$min </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$max </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$regex </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateKind" name="method_validateKind" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">validateKind()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateKind(  <span class="argument">$kind</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$kind </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateAmount" name="method_validateAmount" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">validateAmount()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateAmount(  <span class="argument">$amount</span>,   <span class="argument">$currency</span>,   <span class="argument">$amountRequired = true</span>,   <span class="argument">$currencyRequired = true</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$amount </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$currency </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$amountRequired </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$currencyRequired </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateNumber" name="method_validateNumber" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">validateNumber()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateNumber(  <span class="argument">$number</span>,   <span class="argument">$min</span>,   <span class="argument">$max = 100</span>,   <span class="argument">$required = true</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$number </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$min </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$max </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$required </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateId" name="method_validateId" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">validateId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateId(  <span class="argument">$id</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$id </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateIsset" name="method_validateIsset" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">validateIsset()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateIsset(  <span class="argument">$ref</span>,   <span class="argument">$subject</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$ref </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$subject </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validateOneOf" name="method_validateOneOf" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">validateOneOf()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validateOneOf(  <span class="argument">$input</span>,   <span class="argument">$subject</span>,   <span class="argument">$values</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$input </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$subject </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$values </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">OstKitClient.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/OstKitClient.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/ostkit.html">\ostkit</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on June 14th, 2018 at 13:03.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
