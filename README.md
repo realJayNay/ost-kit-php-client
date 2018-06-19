@@ -8,7 +8,7 @@
 	
 A PHP wrapper for the REST API of [OST KIT](https://kit.ost.com) which is currently under active development. This client implements version 1.0 of the [OST KIT REST API](https://dev.ost.com).
 
-Older versions of this plugin can be found in the [releases](https://github.com/realJayNay/ost-kit-php-client/releases) overview.
+Older versions of this plugin can be found in the [releases](https://realjaynay.github.io/ost-kit-php-client/classes/ostkit.OstKitClient.html) overview.
 
 ![Screenshot](ostkit.png)
 
@@ -32,6 +32,7 @@ require": {
 ```
 
 ## How to use the client
+The [API documentation](https://realjaynay.github.io/ost-kit-php-client/) is automatically generated and deployed to GitHub Pages after every succesful build.
 
 Create the OST KIT client using your Branded Token economy's `API key` and `API secret`.
 ```php
@@ -86,7 +87,7 @@ $transfer = $ost->getTransfer('4073cd70-e4b8-44e9-96ad-871dd8c1e70f');
 // List all transfers
 $tansfers = $ost->listTransfers(true);
 
-// more examples to come; have a look at the phpdoc in the meanwhile :)
+// more examples to come; have a look at the phpdoc in the meanwhile: https://realjaynay.github.io/ost-kit-php-client/ :)
 ```
 
 ## Using the library via packagist

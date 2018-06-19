@@ -4,6 +4,7 @@ namespace ostkit\test;
 
 use Exception;
 use ostkit\OstKitClient;
+use ReflectionMethod;
 
 /**
  * Class OstKitMock that mocks the POST/GET calls of the OstKitClient for unit testing purposes.
@@ -14,30 +15,37 @@ use ostkit\OstKitClient;
  */
 class OstKitMock extends OstKitClient {
     private $services;
-    private $users;
 
     function __construct() {
-        parent::__construct('DummyApiKey', 'DummySecret', 'https://sandboxapi.ost.com/v1', true);
-        $this->users = array();
-        $this->services = array(new UserServiceMock(), new AirdropServiceMock(), new ActionServiceMock(), new TransactionServiceMock(), new TransferServiceMock(), new TokenServiceMock());
+        parent::__construct('DummyApiKey', 'DummySecret', 'https://localhost/v1', true);
+        $this->services = self::getServices();
     }
 
-    protected function post($endpoint, $arguments = array(), $extractResultType = true) {
-        foreach ($this->services as $service) {
-            if ($service->accepts($endpoint)) {
-                return $service->post(self::extractId($endpoint), $arguments);
-            }
-        }
-        throw new Exception("POST request failed - unknown endpoint: $endpoint");
+    protected function getServices() {
+        return array(new UserServiceMock(), new TokenServiceMock());
     }
 
     protected function get($endpoint, $fetchAll, $arguments = array(), $extractResultType = true) {
         foreach ($this->services as $service) {
             if ($service->accepts($endpoint)) {
-                return $service->get(self::extractId($endpoint), $arguments, $fetchAll);
+                return $service->get(self::extractId($endpoint), $fetchAll, $arguments, $extractResultType);
             }
         }
         throw new Exception("GET request failed - unknown endpoint: $endpoint");
+    }
+
+    protected function post($endpoint, $arguments = array(), $extractResultType = true) {
+        foreach ($this->services as $service) {
+            if ($service->accepts($endpoint)) {
+                $reflector = new ReflectionMethod($service, 'post'); // POST is optional for endpoints
+                if ($reflector->getDeclaringClass()->getName() !== get_parent_class($service)) {
+                    return $service->post(self::extractId($endpoint), $arguments, $extractResultType);
+                } else {
+                    throw new Exception("POST request failed - method not supported by endpoint: $endpoint");
+                }
+            }
+        }
+        throw new Exception("POST request failed - unknown endpoint: $endpoint");
     }
 
     static function extractId($endpoint) {
@@ -100,115 +108,5 @@ class OstKitMock extends OstKitClient {
             print $ignored->getMessage();
         }
         return FALSE;
-    }
-
-}
-
-abstract class ServiceMock {
-    private $endpoint;
-
-    protected function __construct($endpoint) {
-        $this->endpoint = $endpoint;
-    }
-
-    function accepts($endpoint) {
-        return isset($endpoint) && strpos($endpoint, '/users') == 0;
-    }
-}
-
-class UserServiceMock extends ServiceMock {
-    private $users = array();
-
-    function __construct() {
-        parent::__construct('/users');
-    }
-
-    function get($id, $arguments = array()) {
-        if (isset($id)) { // retrieve
-            if (isset($this->users[$id])) {
-                return $this->users[$id];
-            }
-            throw new Exception('The requested resource could not be located.');
-        } else { // list
-            return $this->users;
-        }
-        throw new Exception('GET request failed');
-    }
-
-    function post($id, $arguments) {
-        if (isset($id)) { // update
-            if (isset($this->users[$id])) {
-                if (isset($this->users[$id])) {
-                    $user = $this->users[$id];
-                    $user['name'] = $arguments['name'];
-                    return $user;
-                }
-                throw new Exception('The requested resource could not be located.');
-            }
-        } else { // create
-            $uuid = OstKitMock::uuid();
-            $address = OstKitMock::address();
-            $name = $arguments['name'];
-            $user = json_decode("{\"id\": \"$uuid\", \"addresses\": [[ \"1409\", \"$address\"]], \"name\": \"$name\", \"airdropped_tokens\": 0, \"token_balance\": 0}", true);
-            $this->users[$uuid] = $user;
-            return $user;
-        }
-        throw new Exception('POST request failed');
-    }
-}
-
-class ActionServiceMock extends ServiceMock {
-    function __construct() {
-        parent::__construct('/actions');
-    }
-}
-
-class AirdropServiceMock extends ServiceMock {
-    function __construct() {
-        parent::__construct('/actions');
-    }
-}
-
-class TransactionServiceMock extends ServiceMock {
-    function __construct() {
-        parent::__construct('/transactions');
-    }
-}
-
-class TransferServiceMock extends ServiceMock {
-    function __construct() {
-        parent::__construct('/transfers');
-    }
-}
-
-class TokenServiceMock extends ServiceMock {
-    function __construct() {
-        parent::__construct('/token');
-    }
-
-    function get() {
-        return '{
-      "company_uuid": "ab95e922-26de-44ec-9e5a-9b832c388113",
-      "name": "Sample Token",
-      "symbol": "SCO",
-      "symbol_icon": "token_icon_1",
-      "conversion_factor": "14.86660",
-      "token_erc20_address": "0x546d41730B98a24F2dCfcdbE15637aD1939Bf38b",
-      "simple_stake_contract_address": "0x54eF67a54d8b77C091B6599F1A462Ec7b4dFc648",
-      "total_supply": "92701.9999941",
-      "ost_utility_balance": [
-        [
-          "1409",
-          "87.982677084999999996"
-        ]
-      ]
-    },
-    "price_points": {
-      "OST": {
-        "USD": "0.177892"
-      }
-    }
-  }
-}';
     }
 }

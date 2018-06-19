@@ -17,7 +17,7 @@ use Monolog\Logger;
  * @package ostkit
  * @author Jay Nay
  * @version 1.0
- * @link
+ * @link https://dev.ost.com/docs/api.html
  */
 class OstKitClient {
     private $baseUrl; // OST REST base URL
@@ -88,9 +88,10 @@ class OstKitClient {
      * Create a user with the given name.
      *
      * @param string $name User Name (mandatory, not unique) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
-     * @return array decoded JSON array of the 'user' result type
+     * @return array|mixed decoded JSON array of the 'user' result type
      * @throws InvalidArgumentException when the ID is missing or the Name does not pass validation
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_users_create.html
      */
     public function createUser($name) {
         self::validateName($name);
@@ -104,9 +105,10 @@ class OstKitClient {
      *
      * @param string $id User ID (mandatory)
      * @param string $name User Name (mandatory) - must be a minimum of 3 characters, a maximum of 20 characters, and can contain only letters, numbers, and spaces, along with other common sense limitations.
-     * @return array decoded JSON array of the updated 'user' result type
+     * @return array|mixed decoded JSON array of the updated 'user' result type
      * @throws InvalidArgumentException when the ID is missing or the Name does not pass validation
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_users_edit.html
      */
     public function updateUser($id, $name) {
         self::validateId($id);
@@ -120,9 +122,10 @@ class OstKitClient {
      * Retrieve an existing user.
      *
      * @param string $id User ID (mandatory)
-     * @return array decoded JSON array of the updated 'user' result type
+     * @return array|mixed decoded JSON array of the updated 'user' result type
      * @throws InvalidArgumentException when the ID is missing or the Name does not pass validation
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_users_retrieve.html
      */
     public function getUser($id) {
         self::validateId($id);
@@ -131,6 +134,9 @@ class OstKitClient {
         return $user;
     }
 
+    /**
+     * @link https://dev.ost.com/docs/api_users_list.html
+     */
     public function listUsers($fetchAll = false, $filters = array(), $page = 1, $airdropped = null, $orderBy = 'created', $order = 'desc', $limit = 100) {
         $params = array('page_no' => $page, 'order' => $order, 'limit' => $limit, 'order_by' => $orderBy);
         if (isset($airdropped)) {
@@ -158,9 +164,10 @@ class OstKitClient {
      * @param string $currency Currency (mandatory) - either 'USD' (fixed) or 'BT' (floating)
      * @param double $amount Amount - 0.00001 to 100 for 'BT' or 0.01 to 100 for 'USD' - null makes the action accept arbitrary amounts
      * @param double $commissionPercent Commission Fee (only for 'user_to_user' actions) - percentage inclusive in the amount - 0 to 100  - null makes this action accept arbitrary commissions
-     * @return array decoded JSON array of the updated 'action' result type
+     * @return array|mixed decoded JSON array of the updated 'action' result type
      * @throws InvalidArgumentException when the input parameters do not pass validation
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_actions_create.html
      */
     public function createAction($name, $kind, $currency = 'BT', $amount = null, $commissionPercent = null) {
         self::validateName($name);
@@ -174,7 +181,7 @@ class OstKitClient {
             self::validateAmount($amount, $currency);
             $params['amount'] = $amount;
         }
-        if ($kind == 'user_to_user') {
+        if ($kind === 'user_to_user') {
             if (!isset($commissionPercent)) {
                 $params['arbitrary_commission'] = 'true';
             } else {
@@ -197,9 +204,10 @@ class OstKitClient {
      * @param string $currency Currency (mandatory) - either 'USD' (fixed) or 'BT' (floating)
      * @param double|null $amount Amount - 0.00001 to 100 for 'BT' or 0.01 to 100 for 'USD' - null makes the action accept arbitrary amounts
      * @param double|null $commissionPercent Commission Fee (only for 'user_to_user' actions) - percentage inclusive in the amount - 0 to 100  - null makes this action accept arbitrary commissions
-     * @return array decoded JSON array of the updated 'action' result type
+     * @return array|mixed decoded JSON array of the updated 'action' result type
      * @throws InvalidArgumentException when the input parameters do not pass validation
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_actions_update.html
      */
     public function updateAction($id, $name = null, $kind = null, $currency = null, $amount = null, $commissionPercent = null) {
         self::validateId($id);
@@ -219,7 +227,7 @@ class OstKitClient {
             $params['amount'] = $amount;
             $params['arbitrary_amount'] = 'false';
         }
-        if (isset($kind) && $kind == 'user_to_user') {
+        if (isset($kind) && $kind === 'user_to_user') {
             if (!isset($commissionPercent)) {
                 $params['arbitrary_commission'] = 'true';
             } else {
@@ -237,9 +245,10 @@ class OstKitClient {
      * Retrieve an existing action.
      *
      * @param string $id Action ID (mandatory)
-     * @return array decoded JSON array of the updated 'action' result type
+     * @return array|mixed decoded JSON array of the updated 'action' result type
      * @throws InvalidArgumentException when the ID is missing
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_actions_retrieve.html
      */
     public function getAction($id) {
         self::validateId($id);
@@ -253,6 +262,9 @@ class OstKitClient {
         return $action;
     }
 
+    /**
+     * @link https://dev.ost.com/docs/api_actions_list.html
+     */
     public function listActions($fetchAll = false, $filters = array(), $page = 1, $orderBy = 'created', $order = 'desc', $limit = 100) {
         $params = array('page_no' => $page, 'order' => $order, 'limit' => $limit, 'order_by' => $orderBy);
         if (isset($airdropped)) {
@@ -302,9 +314,10 @@ class OstKitClient {
      * @param string $id Action ID (mandatory)
      * @param string $userId User ID (mandatory)
      * @param double|null $amount Amount - 0.00001 to 100 for 'BT' or 0.01 to 100 for 'USD' - null if the amount is preset by the action
-     * @return array decoded JSON array of the updated 'transaction' result type
+     * @return array|mixed decoded JSON array of the updated 'transaction' result type
      * @throws InvalidArgumentException when the requested action is 'user_to_user' or the input parameters do not pass validation
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_action_execute.html
      */
     public function executeCompanyAction($id, $userId, $amount = null) {
         self::validateId($id);
@@ -319,7 +332,7 @@ class OstKitClient {
             }
             self::validateAmount($amount, $action['currency']);
         }
-        if ($action['kind'] == 'company_to_user') {
+        if ($action['kind'] === 'company_to_user') {
             return $this->executeAction($id, $this->token['company_uuid'], $userId, $amount);
         }
         return $this->executeAction($id, $userId, $this->token['company_uuid'], $amount);
@@ -333,9 +346,10 @@ class OstKitClient {
      * @param string $to Receiving User ID (mandatory)
      * @param double|null $amount Amount - 0.00001 to 100 for 'BT' or 0.01 to 100 for 'USD' - null if the amount is preset by the action
      * @param double|null $commissionPercent Commission Fee (only for 'user_to_user' actions) - percentage inclusive in the amount - 0 to 100  - null if the commission percentage is preset by the action
-     * @return array decoded JSON array of the updated 'transaction' result type
+     * @return array|mixed decoded JSON array of the updated 'transaction' result type
      * @throws InvalidArgumentException when the input parameters do not pass validation
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_action_execute.html
      */
     public function executeAction($id, $from, $to, $amount = null, $commissionPercent = null) {
         self::validateId($id);
@@ -360,9 +374,10 @@ class OstKitClient {
      * Retrieve an existing transaction.
      *
      * @param string $id Transaction ID (mandatory)
-     * @return array decoded JSON array of the 'transaction' result type (an additional attribute 'view_url' is added that contains a hyperlink to OST View)
+     * @return array|mixed decoded JSON array of the 'transaction' result type (an additional attribute 'view_url' is added that contains a hyperlink to OST View)
      * @throws InvalidArgumentException when the ID is missing
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_transaction_retrieve.html
      */
     public function getTransaction($id) {
         self::validateId($id);
@@ -375,6 +390,9 @@ class OstKitClient {
         return $transaction;
     }
 
+    /**
+     * @link https://dev.ost.com/docs/api_transaction_list.html
+     */
     public function listTransactions($fetchAll = false, $filters = array(), $page = 1, $order = 'desc', $limit = 100) {
         $params = array('page_no' => $page, 'order' => $order, 'limit' => $limit);
         if (isset($filters) && isset($filters['id'])) {     // TODO - implement filtering for transaction lists
@@ -394,9 +412,10 @@ class OstKitClient {
      * @param int $amount Number (mandatory) of Branded Tokens to airdrop - must be a positive integer value that is less than the total supply
      * @param boolean|null $airdropped Indicates whether to airdrop tokens to end-users who have been airdropped some tokens at least once (true) or to end-users who have never (false) been airdropped tokens or null to omit this filter
      * @param array $userIds Array of selected User IDs to airdrop tokens to or null to omit this filter - this filter works on top of the $airdropped filter
-     * @return array decoded JSON array of the 'airdrop' result type
+     * @return array|mixed decoded JSON array of the 'airdrop' result type
      * @throws InvalidArgumentException when the $amount is missing
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_airdrop_execute.html
      */
     public function airdrop($amount, $airdropped = null, $userIds = array()) {
         self::validateAmount($amount, 0, $this->token['total_supply']);
@@ -418,9 +437,10 @@ class OstKitClient {
      * Please note the interdependency between the $airdropped and $userIds parameters.
      *
      * @param string $id Airdrop ID
-     * @return array decoded JSON array of the 'airdrop' result type
+     * @return array|mixed decoded JSON array of the 'airdrop' result type
      * @throws InvalidArgumentException when the $amount is missing
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_airdrop_retrieve.html
      */
     public function getAirdrop($id) {
         self::validateId($id);
@@ -429,6 +449,9 @@ class OstKitClient {
         return $airdrop;
     }
 
+    /**
+     * @link https://dev.ost.com/docs/api_airdrop_list.html
+     */
     public function listAirdrops($fetchAll = false, $page = 1, $filter = 'all', $orderBy = 'created', $order = 'desc', $limit = 10, $optionalFilters = '') {
         $airdrops = $this->get('/airdrops', $fetchAll, array('page_no' => $page, 'filter' => $filter, 'order_by' => $orderBy, 'order' => $order, 'limit' => $limit, 'optional_filters' => $optionalFilters));
         $this->log->debug("Listed airdrops", $airdrops); // TODO - implement filtering for airdrop lists
@@ -440,9 +463,10 @@ class OstKitClient {
      *
      * @param string $toAddress Public address (mandatory) to which to transfer OST⍺ Prime
      * @param int $amount Amount (mandatory) of OST⍺ Prime to transfer in Wei - between 0 and 10^20 (exclusive)
-     * @return array decoded JSON array of the 'transfer' result type
+     * @return array|mixed decoded JSON array of the 'transfer' result type
      * @throws InvalidArgumentException when the $amount is missing
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_transfers_create.html
      */
     public function transfer($toAddress, $amount) {
         self::validateIsset($toAddress, 'To Address');
@@ -456,9 +480,10 @@ class OstKitClient {
      * Retrieves a transfer.
      *
      * @param string $id Transaction ID
-     * @return array decoded JSON array of the 'transfer' result type
+     * @return array|mixed decoded JSON array of the 'transfer' result type
      * @throws InvalidArgumentException when the $id is missing
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_transfers_retrieve.html
      */
     public function getTransfer($id) {
         self::validateId($id);
@@ -467,6 +492,9 @@ class OstKitClient {
         return $transfer;
     }
 
+    /**
+     * @link https://dev.ost.com/docs/api_transfers_list.html
+     */
     public function listTransfers($fetchAll = false, $page = 1, $filter = 'all', $orderBy = 'created', $order = 'desc', $limit = 10, $optionalFilters = '') {
         $users = $this->get('/transfers', $fetchAll, array('page_no' => $page, 'filter' => $filter, 'order_by' => $orderBy, 'order' => $order, 'limit' => $limit, 'optional_filters' => $optionalFilters));
         $this->log->debug("Listed OST⍺ Prime transfers", $users);
@@ -474,12 +502,11 @@ class OstKitClient {
     }
 
     /**
-     * Retrieves the Branded Token {@link https://dev.ost.com/docs/api_token.html} details.
+     * Retrieves the Branded Token details.
      *
-     * Unlike the other methods, this method returns the entire response as a decoded JSON array.
-     *
-     * @return array decoded JSON array of the full response result type
-     * @throws Exception
+     * @return array|mixed decoded JSON array of the 'token' result type
+     * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_token.html
      */
     public function getToken() {
         $token = $this->get('/token', false);
@@ -488,10 +515,11 @@ class OstKitClient {
     }
 
     /**
-     * Retrieves the current USD price of OST.
+     * Retrieves the current price points for OST.
      *
-     * @return array decoded JSON array fo currency/price pairs (at least 'OST/USD')
-     * @throws Exception
+     * @return array|mixed decoded JSON array fo currency/price pairs (at least 'OST/USD')
+     * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_token.html
      */
     public function getOstPricePoints() {
         $json = $this->get('/token', false, array(), false);
@@ -499,6 +527,16 @@ class OstKitClient {
         return $json['data']['price_points'];
     }
 
+    /**
+     * Performs a GET request to the specified endpoint.
+     *
+     * @param string $endpoint the endpoint to call, might contain path information where applicable
+     * @param bool $fetchAll recursively retrieve all
+     * @param array $arguments arguments to be passed in the request
+     * @param bool $extractResultType whether to extract the wrapped JSON result type or not
+     * @return array|mixed decoded JSON array of the entire result or - if $extractResultType is true - the extracted result type of the response
+     * @throws Exception when the HTTP call is unsuccessful
+     */
     protected function get($endpoint, $fetchAll, $arguments = array(), $extractResultType = true) {
         if ($fetchAll && isset($arguments['limit'])) {
             $arguments['limit'] = 100; // increase limit to max for fetch-all
@@ -532,12 +570,22 @@ class OstKitClient {
                 $this->log->debug("fetching page $nextPage");
                 $arguments['page_no'] = $nextPage;
                 $add = $this->get($endpoint, $fetchAll, $arguments);
-                $jsonArray = array_merge_recursive($jsonArray, $add); // TODO: fix array merge
+                // TODO: fix array merge when merging full results
+                $jsonArray = array_merge_recursive($jsonArray, $add);
             }
         }
         return $extractResultType ? $this->extractResultType($jsonArray) : $jsonArray;
     }
 
+    /**
+     * Performs a POST request to the specified endpoint.
+     *
+     * @param string $endpoint the endpoint to call, might contain path information where applicable
+     * @param array $arguments arguments to be passed in the request
+     * @param bool $extractResultType whether to extract the wrapped JSON result type or not
+     * @return array|mixed decoded JSON array of the entire result or - if $extractResultType is true - the extracted result type of the response
+     * @throws Exception when the HTTP call is unsuccessful
+     */
     protected function post($endpoint, $arguments = array(), $extractResultType = true) {
         $arguments['api_key'] = $this->apiKey;
         $arguments['request_timestamp'] = time();
@@ -569,12 +617,12 @@ class OstKitClient {
         return $extractResultType ? $this->extractResultType($jsonArray) : $jsonArray;
     }
 
-    private function extractResultType($jsonArray) {
+    protected function extractResultType($jsonArray) {
         if (isset($jsonArray['data']) && isset($jsonArray['data']['result_type'])) {
             $resultType = $jsonArray['data']['result_type'];
             $this->log->debug("Extracting result type", array($jsonArray['data']['result_type']));
             $cacheKey = $resultType;
-            if (substr($resultType, -1) == 's') {
+            if (substr($resultType, -1) === 's') {
                 $cacheKey = substr($resultType, 0, -1);
             }
             if (array_key_exists($this->cache, $resultType) && isset($jsonArray['data'][$resultType]['id'])) {
@@ -622,10 +670,10 @@ class OstKitClient {
         }
         if (isset($amount)) {
             $min = 0;
-            if ($currency == 'BT') {
+            if ($currency === 'BT') {
                 $min = 0.00001;
             } else {
-                if ($currency == 'USD') {
+                if ($currency === 'USD') {
                     $min = 0.01;
                 }
             }
@@ -661,7 +709,7 @@ class OstKitClient {
     private static function validateOneOf($input, $subject, ...$values) {
         if (isset($input)) {
             foreach ($values as $value) {
-                if (strcmp($input, $value) == 0) {
+                if (strcmp($input, $value) === 0) {
                     return true;
                 }
             }

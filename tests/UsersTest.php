@@ -2,10 +2,12 @@
 
 namespace ostkit\test;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ostkit\OstKitClient;
 
 /**
- * Test case for interaction with the '/users' endpoint.
+ * Test case for mocked interactions with the '/users' endpoint.
  */
 class UsersTest extends TestCase {
     private $ost;
