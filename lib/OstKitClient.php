@@ -229,7 +229,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_actions_update.html
      */
     public function updateAction($id, $name = null, $kind = null, $currency = null, $amount = null, $commissionPercent = null) {
-        self::validateId($id);
+        self::validateIsset($id, 'ID');
         $params = array();
         if (isset($name)) {
             self::validateName($name, false);
@@ -270,7 +270,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_actions_retrieve.html
      */
     public function getAction($id) {
-        self::validateId($id);
+        self::validateIsset($id, 'ID');
         $action = $this->get("/actions/$id", false);
         $this->log->info('Retrieved action', $action);
         return $action;
@@ -586,6 +586,22 @@ class OstKitClient {
         $balance = $this->get("/balances/$id", false);
         $this->log->debug("Retrieved balance for user $id", $balance);
         return $balance;
+    }
+
+    /**
+     * Retrieves a list of all transactions where a user has been either the sender or a recipient of tokens.
+     *
+     * This basically is the same as calling the /transactions endpoint with a user ID filter.
+     *
+     * @param string $id User ID (mandatory)
+     * @return array|mixed decoded JSON array of the 'transactions' result type
+     * @throws Exception when the HTTP call is unsuccessful
+     */
+    public function getLedger($id) {
+        self::validateId($id);
+        $ledger = $this->get("/ledger/$id", true);
+        $this->log->debug("Retrieved ledger for user $id", $ledger);
+        return $ledger;
     }
 
     /**
