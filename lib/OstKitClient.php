@@ -59,7 +59,7 @@ class OstKitClient {
         if (!isset($baseUrl)) {
             throw new InvalidArgumentException('Base URL is mandatory.');
         }
-        $ost = new OstKitClient($apiKey, $apiSecret, $baseUrl, $debug, 'user', 'action');
+        $ost = new OstKitClient($apiKey, $apiSecret, $baseUrl, $debug);
         $ost->init();
         return $ost;
     }
@@ -271,13 +271,8 @@ class OstKitClient {
      */
     public function getAction($id) {
         self::validateId($id);
-        $action = $this->cache['action'][$id];
-        if (isset($action)) {
-            $this->log->debug("Using cached value for action $id", $action);
-        } else {
-            $action = $this->get("/actions/$id", false);
-            $this->log->info('Retrieved action', $action);
-        }
+        $action = $this->get("/actions/$id", false);
+        $this->log->info('Retrieved action', $action);
         return $action;
     }
 
@@ -623,11 +618,13 @@ class OstKitClient {
                 $this->log->debug("fetching page $nextPage");
                 $arguments['page_no'] = $nextPage;
                 $add = $this->get($endpoint, $fetchAll, $arguments);
-                // TODO: fix array merge when merging full results
+                if ($extractResultType) {
+                    $jsonArray = $this->extractResultType($jsonArray);
+                }
                 $jsonArray = array_merge_recursive($jsonArray, $add);
             }
         }
-        return $extractResultType ? $this->extractResultType($jsonArray) : $jsonArray;
+        return $jsonArray;
     }
 
     /**
@@ -676,17 +673,22 @@ class OstKitClient {
             $this->log->debug("Extracting result type", array($jsonArray['data']['result_type']));
             $cacheKey = $resultType;
             if (substr($resultType, -1) === 's') {
-                $cacheKey = substr($resultType, 0, -1);
+                $cacheKey = substr($resultType, 0, -1); // e.g. cache actions as action
             }
-            if (array_key_exists($this->cache, $resultType) && isset($jsonArray['data'][$resultType]['id'])) {
-                $this->log->debug("Caching result", array($jsonArray['data']['result_type']));
+            if (array_key_exists($resultType, $this->cache) && isset($jsonArray['data'][$resultType]['id'])) {
+
                 if (sizeof($jsonArray['data'][$resultType]) > 1) {
                     // cache each item for list result types
                     foreach ($jsonArray['data'][$resultType] as $item) {
-                        $this->cache[$cacheKey][$jsonArray['data'][$resultType]['id']] = $item['id'];
+                        if (isset($item['id'])) {
+                            $this->log->debug("Caching result", array($jsonArray['data']['result_type']));
+                            $this->cache[$cacheKey][$jsonArray['data'][$resultType]['id']] = $item['id'];
+                        }
                     }
                 } else {
-                    $this->cache[$cacheKey][$jsonArray['data'][$resultType]['id']] = $jsonArray['data'][$resultType]['id'];
+                    if (isset($jsonArray['data'][$resultType]['id'])) {
+                        $this->cache[$cacheKey][$jsonArray['data'][$resultType]['id']] = $jsonArray['data'][$resultType]['id'];
+                    }
                 }
             }
             return $jsonArray['data'][$resultType];
