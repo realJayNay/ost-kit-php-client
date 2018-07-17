@@ -556,22 +556,36 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_token.html
      */
     public function getToken() {
-        $token = $this->get('/token/', false);
-        $this->log->debug("Retrieved token", $token);
+        $token = $this->get('/token', false);
+        $this->log->debug('Retrieved token', $token);
         return $token;
     }
 
     /**
      * Retrieves the current price points for OST.
      *
-     * @return array|mixed decoded JSON array fo currency/price pairs (at least 'OST/USD')
+     * @return array|mixed decoded JSON array of currency/price pairs (at least 'OST/USD')
      * @throws Exception when the HTTP call is unsuccessful
      * @link https://dev.ost.com/docs/api_token.html
      */
     public function getOstPricePoints() {
         $json = $this->get('/token', false, array(), false);
-        $this->log->debug("Retrieved OST price points", $json['data']['price_points']);
+        $this->log->debug('Retrieved OST price points', $json['data']['price_points']);
         return $json['data']['price_points'];
+    }
+
+    /**
+     * Retrieves the current token balance for a user.
+     *
+     * @param string $id User ID (mandatory)
+     * @return array|mixed decoded JSON array of the 'balance' result type
+     * @throws Exception when the HTTP call is unsuccessful
+     */
+    public function getBalance($id) {
+        self::validateId($id);
+        $balance = $this->get("/balance/$id", false);
+        $this->log->debug("Retrieved balance for user $id", $balance);
+        return $balance;
     }
 
     /**

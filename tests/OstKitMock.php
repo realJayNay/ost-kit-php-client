@@ -17,12 +17,12 @@ class OstKitMock extends OstKitClient {
     private $services;
 
     function __construct() {
-        parent::__construct('DummyApiKey', 'DummySecret', 'https://localhost/v1', true);
+        parent::__construct('DummyApiKey', 'DummySecret', 'https://localhost/v1.1', true);
         $this->services = self::getServices();
     }
 
     protected function getServices() {
-        return array(new UserServiceMock(), new TokenServiceMock());
+        return array(new UserServiceMock(), new TokenServiceMock(), new BalanceServiceMock());
     }
 
     protected function get($endpoint, $fetchAll, $arguments = array(), $extractResultType = true) {
