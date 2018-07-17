@@ -20,13 +20,20 @@ use Monolog\Logger;
  * @link https://dev.ost.com/docs/api.html
  */
 class OstKitClient {
-    private $baseUrl; // OST REST base URL
-    private $apiKey; // OST KIT API key
+    /** @var string OST REST base URL */
+    private $baseUrl;
+    /** @var string OST KIT API key */
+    private $apiKey;
+    /** @var string OST KIT secret */
     private $apiSecret; // OST KIT API secret
 
+    /** @var Logger logger */
     private $log;
 
-    private $token;
+    /** @var array cached JSON array that contains the Branded Token details */
+    private $token; // TODO - update the token balance when actions are completed and refresh the entire array every x minutes?
+
+    /** @var array cached JSON arrays */
     private $cache;
 
     /**
@@ -77,11 +84,14 @@ class OstKitClient {
         }
     }
 
+    /**
+     * @throws Exception when the HTTP call is unsuccessful
+     */
     private function init() {
         $this->log->debug('Initialized result type caches', $this->cache);
         $this->log->debug('Checking OST KIT connectivity and retrieving Branded Token details.');
         $this->token = $this->getToken();
-        $this->log->info('Branded Token economy is open for business.', $this->token);
+        $this->log->info("Branded Token economy is open for business.", $this->token);
     }
 
     /**
@@ -136,6 +146,15 @@ class OstKitClient {
 
     /**
      * @link https://dev.ost.com/docs/api_users_list.html
+     * @param bool $fetchAll
+     * @param array $filters
+     * @param int $page
+     * @param null $airdropped
+     * @param string $orderBy
+     * @param string $order
+     * @param int $limit
+     * @return array|mixed
+     * @throws Exception when the HTTP call is unsuccessful
      */
     public function listUsers($fetchAll = false, $filters = array(), $page = 1, $airdropped = null, $orderBy = 'created', $order = 'desc', $limit = 100) {
         $params = array('page_no' => $page, 'order' => $order, 'limit' => $limit, 'order_by' => $orderBy);
@@ -264,6 +283,14 @@ class OstKitClient {
 
     /**
      * @link https://dev.ost.com/docs/api_actions_list.html
+     * @param bool $fetchAll
+     * @param array $filters
+     * @param int $page
+     * @param string $orderBy
+     * @param string $order
+     * @param int $limit
+     * @return array|mixed
+     * @throws Exception
      */
     public function listActions($fetchAll = false, $filters = array(), $page = 1, $orderBy = 'created', $order = 'desc', $limit = 100) {
         $params = array('page_no' => $page, 'order' => $order, 'limit' => $limit, 'order_by' => $orderBy);
@@ -392,6 +419,13 @@ class OstKitClient {
 
     /**
      * @link https://dev.ost.com/docs/api_transaction_list.html
+     * @param bool $fetchAll
+     * @param array $filters
+     * @param int $page
+     * @param string $order
+     * @param int $limit
+     * @return array|mixed
+     * @throws Exception
      */
     public function listTransactions($fetchAll = false, $filters = array(), $page = 1, $order = 'desc', $limit = 100) {
         $params = array('page_no' => $page, 'order' => $order, 'limit' => $limit);
@@ -451,6 +485,15 @@ class OstKitClient {
 
     /**
      * @link https://dev.ost.com/docs/api_airdrop_list.html
+     * @param bool $fetchAll
+     * @param int $page
+     * @param string $filter
+     * @param string $orderBy
+     * @param string $order
+     * @param int $limit
+     * @param string $optionalFilters
+     * @return array|mixed
+     * @throws Exception
      */
     public function listAirdrops($fetchAll = false, $page = 1, $filter = 'all', $orderBy = 'created', $order = 'desc', $limit = 10, $optionalFilters = '') {
         $airdrops = $this->get('/airdrops', $fetchAll, array('page_no' => $page, 'filter' => $filter, 'order_by' => $orderBy, 'order' => $order, 'limit' => $limit, 'optional_filters' => $optionalFilters));
@@ -494,6 +537,15 @@ class OstKitClient {
 
     /**
      * @link https://dev.ost.com/docs/api_transfers_list.html
+     * @param bool $fetchAll
+     * @param int $page
+     * @param string $filter
+     * @param string $orderBy
+     * @param string $order
+     * @param int $limit
+     * @param string $optionalFilters
+     * @return array|mixed
+     * @throws Exception
      */
     public function listTransfers($fetchAll = false, $page = 1, $filter = 'all', $orderBy = 'created', $order = 'desc', $limit = 10, $optionalFilters = '') {
         $users = $this->get('/transfers', $fetchAll, array('page_no' => $page, 'filter' => $filter, 'order_by' => $orderBy, 'order' => $order, 'limit' => $limit, 'optional_filters' => $optionalFilters));
@@ -509,7 +561,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_token.html
      */
     public function getToken() {
-        $token = $this->get('/token', false);
+        $token = $this->get('/token/', false);
         $this->log->debug("Retrieved token", $token);
         return $token;
     }
@@ -550,8 +602,9 @@ class OstKitClient {
         }
 
         $query = $endpoint . '?' . http_build_query($arguments, '', '&');
+        $this->log->debug("String to sign: $query");
         $url = $this->baseUrl . $query . '&signature=' . hash_hmac('sha256', $query, $this->apiSecret);
-        $this->log->debug("GET $url");
+        $this->log->debug("GET $url", $arguments);
         $json = file_get_contents($url);
 
         if ($json == FALSE) {
@@ -603,7 +656,7 @@ class OstKitClient {
             )
         ));
 
-        $this->log->debug("POST $this->baseUrl$endpoint with body $encoded");
+        $this->log->debug("POST $this->baseUrl$endpoint with body $encoded", $arguments);
         $json = file_get_contents($this->baseUrl . $endpoint, FALSE, $context);
 
         if ($json == FALSE) {
