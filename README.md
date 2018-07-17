@@ -1,14 +1,11 @@
 # OST KIT - PHP Wrapper for the OST KIT API
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client#v0.9.2)
-[![Latest Unstable Version](https://img.shields.io/packagist/vpre/jay-nay/ost-kit-php-client.svg)](https://packagist.org/packages/jay-nay/ost-kit-php-client#dev-master)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/)
 [![Build Status](https://travis-ci.org/realJayNay/ost-kit-php-client.svg?branch=master)](https://travis-ci.org/realJayNay/ost-kit-php-client)
 [![codecov](https://codecov.io/gh/realJayNay/ost-kit-php-client/branch/master/graph/badge.svg)](https://codecov.io/gh/realJayNay/ost-kit-php-client)
 	
-A PHP wrapper for the REST API of [OST KIT](https://kit.ost.com) which is currently under active development. This client implements version 1.0 of the [OST KIT REST API](https://dev.ost.com).
+An unofficial PHP wrapper for the [REST API v1.x](https://dev.ost.com) of [OST KIT](https://kit.ost.com).
 
-Older versions of this plugin can be found in the [releases](https://realjaynay.github.io/ost-kit-php-client/classes/ostkit.OstKitClient.html) overview.
+Older versions of this wrapper can be found in the [releases](https://github.com/realJayNay/ost-kit-php-client/releases) overview.
 
 ![Screenshot](ostkit.png)
 
@@ -32,7 +29,7 @@ require": {
 ```
 
 ## How to use the client
-The [API documentation](https://realjaynay.github.io/ost-kit-php-client/) is automatically generated and deployed to GitHub Pages after every succesful build.
+The [API documentation](https://realjaynay.github.io/ost-kit-php-client/classes/ostkit.OstKitClient.html) is automatically generated and deployed to GitHub Pages after every succesful build.
 
 Create the OST KIT client using your Branded Token economy's `API key` and `API secret`.
 ```php
@@ -89,11 +86,6 @@ $tansfers = $ost->listTransfers(true);
 
 // more examples to come; have a look at the phpdoc in the meanwhile: https://realjaynay.github.io/ost-kit-php-client/ :)
 ```
-
-## Using the library via packagist
-
-This client is also available via [packagist](https://packagist.org/packages/jay-nay/ost-kit-php-client). 
-See [here](https://getcomposer.org/doc/00-intro.md) for an introduction on how to manage dependencies via ```composer.json```.
 
 ## OST KIT PHP Client Roadmap
 
