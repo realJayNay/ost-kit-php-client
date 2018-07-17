@@ -5,7 +5,7 @@ namespace ostkit\test;
 use Exception;
 
 /**
- * Mock class for the '/actions' endpoint.
+ * Mock class for the '/balances' endpoint.
  *
  * @package ostkit\test
  */
@@ -14,7 +14,7 @@ class BalanceServiceMock extends AbstractServiceMock {
     private $json;
 
     function __construct() {
-        parent::__construct('/balance');
+        parent::__construct('/balances');
         $this->json = json_decode('{
   "success": true,
   "data": {  

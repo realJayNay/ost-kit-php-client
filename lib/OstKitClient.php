@@ -583,7 +583,7 @@ class OstKitClient {
      */
     public function getBalance($id) {
         self::validateId($id);
-        $balance = $this->get("/balance/$id", false);
+        $balance = $this->get("/balances/$id", false);
         $this->log->debug("Retrieved balance for user $id", $balance);
         return $balance;
     }
