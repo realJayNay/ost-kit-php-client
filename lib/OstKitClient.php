@@ -52,7 +52,7 @@ class OstKitClient {
      * @throws InvalidArgumentException when API key, API secret and/or Base URL is missing
      * @throws Exception when initialization fails
      */
-    public static function create($apiKey, $apiSecret, $baseUrl = 'https://sandboxapi.ost.com/v1', $debug = true) {
+    public static function create($apiKey, $apiSecret, $baseUrl = 'https://sandboxapi.ost.com/v1.1', $debug = true) {
         if (!isset($apiKey) || !isset($apiSecret)) {
             throw new InvalidArgumentException('API Key and API Secret are mandatory.');
         }
