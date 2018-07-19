@@ -25,7 +25,7 @@ class OstKitClient {
     /** @var string OST KIT API key */
     private $apiKey;
     /** @var string OST KIT secret */
-    private $apiSecret; // OST KIT API secret
+    private $apiSecret;
 
     /** @var Logger logger */
     private $log;
@@ -682,7 +682,9 @@ class OstKitClient {
                     $jsonArray = array_merge_recursive($jsonArray, $add);
                 }
             }
-        } else if ($extractResultType) {
+        }
+
+        if ($extractResultType && isset($jsonArray['success'])) {
             $jsonArray = $this->extractResultType($jsonArray);
         }
         return $jsonArray;
