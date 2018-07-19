@@ -124,7 +124,7 @@
                             </li>
                             <li>
                                 <a href="../reports/deprecated.html">
-                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">1</span>
                                 </a>
                             </li>
                         </ul>
@@ -144,19 +144,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-352672040"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-341144682"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-352672040" class="accordion-body collapse in">
+            <div id="namespace-341144682" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2006745298"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-149093763"></a>
                                 <a href="../namespaces/ostkit.html" style="margin-left: 30px; padding-left: 0">ostkit</a>
             </div>
-            <div id="namespace-2006745298" class="accordion-body collapse ">
+            <div id="namespace-149093763" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -217,7 +217,7 @@
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_updateAction" class="">updateAction()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_getAction" class="">getAction()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_listActions" class="">listActions()</a><br />
-                                                                    <a href="../classes/ostkit.OstKitClient.html#method_executeCompanyAction" class="">executeCompanyAction()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_executeCompanyAction" class="deprecated">executeCompanyAction()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_executeAction" class="">executeAction()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_getTransaction" class="">getTransaction()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_listTransactions" class="">listTransactions()</a><br />
@@ -1058,7 +1058,7 @@
         <div class="span8 content class">
             <a id="method_executeCompanyAction" name="method_executeCompanyAction" class="anchor"></a>
             <article class="method">
-                <h3 class="public ">executeCompanyAction()</h3>
+                <h3 class="public deprecated">executeCompanyAction()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">executeCompanyAction(string  <span class="argument">$id</span>, string  <span class="argument">$userId</span>, double|null  <span class="argument">$amount = null</span>) : array|mixed</pre>
                 <p><em>Execute an existing &#039;user_to_company&#039; or &#039;company_to_user&#039; action and automatically assign the company as recipient or sender.</em></p>
@@ -1103,7 +1103,11 @@
         </div>
         <aside class="span4 detailsbar">
             <h1><i class="icon-arrow-down"></i></h1>
-                                                            <dl>
+                                                                <aside class="alert alert-block alert-error">
+                    <h4>Deprecated</h4>
+                    API v1 contains improvements for this - will be refactored soon
+                </aside>
+                        <dl>
                                                     <dt>Inherited from</dt>
                     <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
                                                                             <dt>See also</dt>
@@ -2486,7 +2490,7 @@
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on July 19th, 2018 at 09:25.
+                    on July 19th, 2018 at 12:16.
                 </section>
             </section>
         </section>
