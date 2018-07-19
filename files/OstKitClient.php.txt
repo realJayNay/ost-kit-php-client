@@ -87,7 +87,7 @@ class OstKitClient {
     /**
      * @throws Exception when the HTTP call is unsuccessful
      */
-    private function init() {
+    protected function init() {
         $this->log->debug('Initialized result type caches', $this->cache);
         $this->log->debug('Checking OST KIT connectivity and retrieving Branded Token details.');
         $this->token = $this->getToken();
@@ -570,8 +570,8 @@ class OstKitClient {
      */
     public function getOstPricePoints() {
         $json = $this->get('/token', false, array(), false);
-        $this->log->debug('Retrieved OST price points', $json['data']['price_points']);
-        return $json['data']['price_points'];
+        $this->log->debug('Retrieved OST price points', $json['data']['price_points']['OST']);
+        return $json['data']['price_points']['OST'];
     }
 
     /**
@@ -580,6 +580,7 @@ class OstKitClient {
      * @param string $id User ID (mandatory)
      * @return array|mixed decoded JSON array of the 'balance' result type
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_balance.html
      */
     public function getBalance($id) {
         self::validateId($id);
@@ -589,6 +590,32 @@ class OstKitClient {
     }
 
     /**
+     * Retrieves the current Branded Token balance for a user.
+     *
+     * The balance array is merged with the token array and countervalues in OST and USD are added.
+     *  - converted countervalue in OST (ost_value)
+     *  - converted countervalue in USD (usd_value)
+     *
+     * @param string $id User ID (mandatory)
+     * @return array|mixed merged decoded JSON array of the 'balance' and 'token' result types + countervalues in OST and USD
+     * @throws Exception when the HTTP call is unsuccessful
+     * @see getBalance
+     * @see getToken
+     * @see getOstPricePoints
+     */
+    public function getCombinedBalance($id) {
+        $balance = array_merge($this->getBalance($id), $this->token);
+
+        $pricePoints = $this->getOstPricePoints();
+        $balance['ost_value'] = $balance['available_balance'] * $balance['conversion_factor'];
+        $balance['usd_value'] = $balance['ost_value'] * $pricePoints['USD'];
+
+        $this->log->debug("Calculated combined balance for user $id", $balance);
+        return $balance;
+    }
+
+
+    /**
      * Retrieves a list of all transactions where a user has been either the sender or a recipient of tokens.
      *
      * This basically is the same as calling the /transactions endpoint with a user ID filter.
@@ -596,6 +623,7 @@ class OstKitClient {
      * @param string $id User ID (mandatory)
      * @return array|mixed decoded JSON array of the 'transactions' result type
      * @throws Exception when the HTTP call is unsuccessful
+     * @link https://dev.ost.com/docs/api_ledger.html
      */
     public function getLedger($id) {
         self::validateId($id);
