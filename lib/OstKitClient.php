@@ -340,9 +340,9 @@ class OstKitClient {
      * @throws InvalidArgumentException when the requested action is 'user_to_user' or the input parameters do not pass validation
      * @throws Exception when the HTTP call is unsuccessful
      * @link https://dev.ost.com/docs/api_action_execute.html
+     * @deprecated API v1 contains improvements for this - will be refactored soon
      */
     public function executeCompanyAction($id, $userId, $amount = null) {
-        self::validateId($id);
         $action = $this->getAction($id);
         self::validateKind($action['kind']);
         if (strpos($action['kind'], 'company') == false) {
@@ -374,10 +374,9 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_action_execute.html
      */
     public function executeAction($id, $from, $to, $amount = null, $commissionPercent = null) {
-        self::validateId($id);
-        if (!isset($from) || !isset($from)) {
-            throw new InvalidArgumentException('From ID and To ID are mandatory.');
-        }
+        self::validateIsset($id, 'ID');
+        self::validateIsset($from, 'From User ID');
+        self::validateIsset($to, 'To User ID');
         $params = array('from_user_id' => $from, 'to_user_id' => $to, 'action_id' => $id);
         if (isset($amount)) {
             self::validateAmount($amount, null, true, false);
@@ -669,18 +668,22 @@ class OstKitClient {
             throw new Exception("GET request unsuccessful: '" . $jsonArray['err']['msg'] . "': $url");
         }
 
-        if ($fetchAll && isset($jsonArray['data']['meta']['next_page_payload']['page_no'])) {
-            // recursively fetch all items
-            $nextPage = $jsonArray['data']['meta']['next_page_payload']['page_no'];
-            while (isset($nextPage) && $nextPage != $arguments['page_no']) {
-                $this->log->debug("fetching page $nextPage");
-                $arguments['page_no'] = $nextPage;
-                $add = $this->get($endpoint, $fetchAll, $arguments);
-                if ($extractResultType) {
-                    $jsonArray = $this->extractResultType($jsonArray);
+        if ($fetchAll) {
+            if (isset($jsonArray['data']['meta']['next_page_payload']['page_no'])) {
+                // recursively fetch all items
+                $nextPage = $jsonArray['data']['meta']['next_page_payload']['page_no'];
+                while (isset($nextPage) && $nextPage != $arguments['page_no']) {
+                    $this->log->debug("fetching page $nextPage");
+                    $arguments['page_no'] = $nextPage;
+                    $add = $this->get($endpoint, $fetchAll, $arguments);
+                    if ($extractResultType) {
+                        $jsonArray = $this->extractResultType($jsonArray);
+                    }
+                    $jsonArray = array_merge_recursive($jsonArray, $add);
                 }
-                $jsonArray = array_merge_recursive($jsonArray, $add);
             }
+        } else if ($extractResultType) {
+            $jsonArray = $this->extractResultType($jsonArray);
         }
         return $jsonArray;
     }
