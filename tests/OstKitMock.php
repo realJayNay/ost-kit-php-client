@@ -19,6 +19,7 @@ class OstKitMock extends OstKitClient {
     function __construct() {
         parent::__construct('DummyApiKey', 'DummySecret', 'https://localhost/v1.1', true);
         $this->services = self::getServices();
+        parent::init();
     }
 
     protected function getServices() {

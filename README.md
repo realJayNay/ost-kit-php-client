@@ -49,6 +49,18 @@ $user = $ost->updateUser($user['id'], 'Liza');
 // Get information about a specific user, including its public address and token balance.
 $user = $ost->getUser($user['id']);
 
+// Get the token balance of a user.
+$balance = $ost->getBalance($user['id']);
+
+// Get the value of a user's token balance in BT, OST and USD.
+$balance = $ost->getCombinedBalance($user['id']);
+$btValue = $balance['available_balance'];
+$ostValue = $balance['ost_value'];
+$usdValue = $balance['usd_value'];
+
+// List the full ledger of a user.
+$transactions = $ost->getLedger($user['id']);
+
 // List all users.
 $users = $ost->listUsers(true);
 

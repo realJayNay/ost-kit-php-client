@@ -31,7 +31,7 @@ class BalanceServiceMock extends AbstractServiceMock {
 
     function get($id, $arguments, $fetchAll, $extractResultTYpe) {
         if (isset($id) && $id === self::UUID) { // retrieve
-            return $this->json;
+            return $this->json['data']['balance'];
         }
         throw new Exception('Resource matching the id could not be located.');
     }

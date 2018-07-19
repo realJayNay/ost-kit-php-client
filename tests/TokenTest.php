@@ -31,10 +31,10 @@ class TokenTest extends TestCase {
     public function testGetOstPricePoints() {
         $pricePoints = $this->ost->getOstPricePoints();
         self::assertNotNull($pricePoints, 'OST price points should not be null.');
-        if (!isset($pricePoints['OST']['USD'])) {
+        if (!isset($pricePoints['USD'])) {
             self::fail("At least the price point for OST/USD should at be available");
         } else {
-            self::assertTrue(is_numeric($pricePoints['OST']['USD']), 'Price point for OST/USD should be a numeric value');
+            self::assertTrue(is_numeric($pricePoints['USD']), 'Price point for OST/USD should be a numeric value');
         }
     }
 }

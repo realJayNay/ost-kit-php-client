@@ -54,4 +54,11 @@ class BalanceTest extends TestCase {
         $balance = $this->ost->getBalance(null);
         self::assertNotNull($balance, 'Valid balance should not be null.');
     }
+
+    public function testGetCombinedBalance() {
+        $balance = $this->ost->getCombinedBalance('f5f9b061-b784-4ecd-b599-bc263860f539');
+        self::assertNotNull($balance, 'Valid combined balance array should not be null.');
+        self::assertTrue(isset($balance['ost_value']), 'Combined balance must contain OST countervalue');
+        self::assertTrue(isset($balance['usd_value']), 'Combined balance must contain USD countervalue');
+    }
 }
