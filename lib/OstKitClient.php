@@ -121,7 +121,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_users_edit.html
      */
     public function updateUser($id, $name) {
-        self::validateId($id);
+        self::validateUuid($id);
         self::validateName($name);
         $user = $this->post("/users/$id", array('name' => $name));
         $this->log->info('Updated user', $user);
@@ -138,7 +138,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_users_retrieve.html
      */
     public function getUser($id) {
-        self::validateId($id);
+        self::validateUuid($id);
         $user = $this->get("/users/$id", false);
         $this->log->info('Retrieved user', $user);
         return $user;
@@ -375,8 +375,8 @@ class OstKitClient {
      */
     public function executeAction($id, $from, $to, $amount = null, $commissionPercent = null) {
         self::validateIsset($id, 'ID');
-        self::validateIsset($from, 'From User ID');
-        self::validateIsset($to, 'To User ID');
+        self::validateUuid($from, 'From User ID');
+        self::validateUuid($to, 'To User ID');
         $params = array('from_user_id' => $from, 'to_user_id' => $to, 'action_id' => $id);
         if (isset($amount)) {
             self::validateAmount($amount, null, true, false);
@@ -401,7 +401,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_transaction_retrieve.html
      */
     public function getTransaction($id) {
-        self::validateId($id);
+        self::validateUuid($id);
         $transaction = $this->get("/transactions/$id", false);
         $hash = $transaction['transaction_hash'];
         if (isset($hash)) {
@@ -471,7 +471,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_airdrop_retrieve.html
      */
     public function getAirdrop($id) {
-        self::validateId($id);
+        self::validateUuid($id);
         $airdrop = $this->get("/airdrops/$id", false);
         $this->log->info('Retrieved airdrop', $airdrop);
         return $airdrop;
@@ -523,7 +523,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_transfers_retrieve.html
      */
     public function getTransfer($id) {
-        self::validateId($id);
+        self::validateUuid($id);
         $transfer = $this->get("/transfers/$id", false);
         $this->log->debug('Retrieved OST⍺ Prime transfer', $transfer);
         return $transfer;
@@ -582,7 +582,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_balance.html
      */
     public function getBalance($id) {
-        self::validateId($id);
+        self::validateUuid($id);
         $balance = $this->get("/balances/$id", false);
         $this->log->debug("Retrieved balance for user $id", $balance);
         return $balance;
@@ -625,7 +625,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_ledger.html
      */
     public function getLedger($id) {
-        self::validateId($id);
+        self::validateUuid($id);
         $ledger = $this->get("/ledger/$id", true);
         $this->log->debug("Retrieved ledger for user $id", $ledger);
         return $ledger;
@@ -798,20 +798,20 @@ class OstKitClient {
         return true;
     }
 
-    private static function validateNumber($number, $min, $max = 100, $required = true) {
+    private static function validateNumber($number, $min, $max = 100, $required = true, $subject = 'Number') {
         if ($required) {
-            self::validateIsset($number, 'Number');
+            self::validateIsset($number, $subject);
         }
         if (isset($number) && ($number < $min || $number > $max)) {
-            throw new InvalidArgumentException("Number value $number must be between $min and $max.");
+            throw new InvalidArgumentException("$subject value '$number' must be numeric and between $min and $max.");
         }
         return true;
     }
 
-    private static function validateId($id) {
-        self::validateIsset($id, 'ID');
+    private static function validateUuid($id, $subject = 'ID') {
+        self::validateIsset($id, $subject);
         if (!preg_match('/' . self::UUID_REGEX . '/', $id)) {
-            throw new InvalidArgumentException("ID '$id' is not a valid UUID.");
+            throw new InvalidArgumentException("$subject '$id' is not a valid UUID.");
         }
     }
 

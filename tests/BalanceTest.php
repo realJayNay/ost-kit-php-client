@@ -55,6 +55,9 @@ class BalanceTest extends TestCase {
         self::assertNotNull($balance, 'Valid balance should not be null.');
     }
 
+    /**
+     * @covers OstKitClient::getCombinedBalance
+     */
     public function testGetCombinedBalance() {
         $balance = $this->ost->getCombinedBalance('f5f9b061-b784-4ecd-b599-bc263860f539');
         self::assertNotNull($balance, 'Valid combined balance array should not be null.');
