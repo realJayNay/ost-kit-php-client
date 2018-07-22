@@ -26,7 +26,7 @@ class TokenTest extends TestCase {
     }
 
     /**
-     * @covers OstKitClient::getToken
+     * @covers OstKitClient::getOstPricePoints
      */
     public function testGetOstPricePoints() {
         $pricePoints = $this->ost->getOstPricePoints();

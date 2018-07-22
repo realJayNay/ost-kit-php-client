@@ -446,7 +446,7 @@ class OstKitClient {
      * @link https://dev.ost.com/docs/api_airdrop_execute.html
      */
     public function airdrop($amount, $airdropped = null, $userIds = array()) {
-        self::validateAmount($amount, 0, $this->token['total_supply']);
+        self::validateAmount($amount, 'BT', $this->token['total_supply']);
         $params = array('amount' => $amount);
         if (isset($userIds) && sizeof($userIds) > 0) {
             $params['user_ids'] = implode(',', $userIds);
@@ -832,6 +832,6 @@ class OstKitClient {
                 }
             }
         }
-        throw new InvalidArgumentException("$subject '$input' has an invalid value. Possible values are: $values.");
+        throw new InvalidArgumentException("$subject '$input' has an invalid value. Possible values are: " . implode(', ', $values));
     }
 }

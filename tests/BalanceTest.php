@@ -5,6 +5,7 @@ namespace ostkit\test;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use ostkit\OstKitClient;
 
 class BalanceTest extends TestCase {
     private $ost;
