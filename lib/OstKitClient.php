@@ -405,7 +405,7 @@ class OstKitClient {
         $transaction = $this->get("/transactions/$id", false);
         $hash = $transaction['transaction_hash'];
         if (isset($hash)) {
-            $transaction['view_url'] = 'https://view.ost.com/chain-id/' . $this->token['ost_utility_balance'][0][0] . "/transaction/$hash";
+            $transaction['view_url'] = $this->createOstViewUrl($hash);
         }
         $this->log->debug('Retrieved transaction', $transaction);
         return $transaction;
@@ -600,34 +600,67 @@ class OstKitClient {
      * @throws Exception when the HTTP call is unsuccessful
      * @see getBalance
      * @see getToken
-     * @see getOstPricePoints
+     * @see getCounterValues
      */
     public function getCombinedBalance($id) {
         $balance = array_merge($this->getBalance($id), $this->token);
-
-        $pricePoints = $this->getOstPricePoints();
-        $balance['ost_value'] = $balance['available_balance'] * $balance['conversion_factor'];
-        $balance['usd_value'] = $balance['ost_value'] * $pricePoints['USD'];
-
-        $this->log->debug("Calculated combined balance for user $id", $balance);
+        $balance = array_merge($balance, $this->getCounterValues($balance['available_balance']));
+        $this->log->debug("Calculated enhanced balance for user $id", $balance);
         return $balance;
     }
 
+    /**
+     * Countervalues in OST and USD are calculated as:
+     *  - converted countervalue in OST (ost_value)
+     *  - converted countervalue in USD (usd_value)
+     *
+     * @param $brandedTokenAmount int amount in Branded Token
+     * @param double $exchangeRate OST/USD exchange rate
+     * @return mixed
+     * @throws Exception
+     * @see getOstPricePoints
+     */
+    private function getCounterValues($brandedTokenAmount, $exchangeRate = null) {
+        if (!isset($exchangeRate)) {
+            $exchangeRate = $this->getOstPricePoints();
+            $exchangeRate = $exchangeRate['USD'];
+        }
+        $counterValues = array();
+        $counterValues['ost_value'] = $brandedTokenAmount / $this->token['conversion_factor'];
+        $counterValues['usd_value'] = $counterValues['ost_value'] * $exchangeRate;
+        return $counterValues;
+    }
 
     /**
      * Retrieves a list of all transactions where a user has been either the sender or a recipient of tokens.
      *
      * This basically is the same as calling the /transactions endpoint with a user ID filter.
      *
+     * Each transaction gets the following additional properties:
+     *  - converted countervalue in OST (ost_value)
+     *  - converted countervalue in USD (usd_value)
+     *  - hyperlink to OST VIEW (view_url)
+     *
      * @param string $id User ID (mandatory)
      * @return array|mixed decoded JSON array of the 'transactions' result type
      * @throws Exception when the HTTP call is unsuccessful
      * @link https://dev.ost.com/docs/api_ledger.html
+     * @see getCounterValues
+     * @see getOstPricePoints
      */
     public function getLedger($id) {
         self::validateUuid($id);
+        $exchangeRate = $this->getOstPricePoints();
+        $exchangeRate = $exchangeRate['USD'];
         $ledger = $this->get("/ledger/$id", true);
-        $this->log->debug("Retrieved ledger for user $id", $ledger);
+        $ledger = array_map(function ($transaction) use ($exchangeRate) {
+            if (isset($transaction['transaction_hash'])) {
+                $transaction['view_url'] = $this->createOstViewUrl($transaction['transaction_hash']);
+            }
+            $transaction = array_merge($transaction, $this->getCounterValues($transaction['amount'], $exchangeRate));
+            return $transaction;
+        }, $ledger);
+        $this->log->debug("Retrieved enhanced ledger for user $id", $ledger);
         return $ledger;
     }
 
@@ -833,5 +866,16 @@ class OstKitClient {
             }
         }
         throw new InvalidArgumentException("$subject '$input' has an invalid value. Possible values are: " . implode(', ', $values));
+    }
+
+    /**
+     * Creates a URL to OST VIEW for the given transaction hash, takes the utility chain ID into account.
+     *
+     * @param $hash string Transaction hash
+     * @return string URL to display this transaction in OST VIEW
+     * @see getToken
+     */
+    private function createOstViewUrl($hash) {
+        return "https://view.ost.com/chain-id/{$this->token['ost_utility_balance'][0][0]}/transaction/$hash";
     }
 }
