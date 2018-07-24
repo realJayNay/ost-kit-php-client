@@ -144,19 +144,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-2098863765"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-218612281"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-2098863765" class="accordion-body collapse in">
+            <div id="namespace-218612281" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1204451821"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1553421465"></a>
                                 <a href="../namespaces/ostkit.html" style="margin-left: 30px; padding-left: 0">ostkit</a>
             </div>
-            <div id="namespace-1204451821" class="accordion-body collapse ">
+            <div id="namespace-1553421465" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -257,6 +257,7 @@
                         </section>
                         <section class="row-fluid private">
                             <section class="span4">
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_getCounterValues" class="">getCounterValues()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_validateName" class="">validateName()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_validateKind" class="">validateKind()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_validateAmount" class="">validateAmount()</a><br />
@@ -264,6 +265,7 @@
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_validateUuid" class="">validateUuid()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_validateIsset" class="">validateIsset()</a><br />
                                                                     <a href="../classes/ostkit.OstKitClient.html#method_validateOneOf" class="">validateOneOf()</a><br />
+                                                                    <a href="../classes/ostkit.OstKitClient.html#method_createOstViewUrl" class="">createOstViewUrl()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <a href="../classes/ostkit.OstKitClient.html#property_baseUrl" class="">$baseUrl</a><br />
@@ -1823,7 +1825,7 @@
                                                                             <dt>See also</dt>
                                                                 <dd><a href=""><span class="namespace-wrapper">\ostkit\getBalance</span></a></dd>
                                             <dd><a href=""><span class="namespace-wrapper">\ostkit\getToken</span></a></dd>
-                                            <dd><a href=""><span class="namespace-wrapper">\ostkit\getOstPricePoints</span></a></dd>
+                                            <dd><a href=""><span class="namespace-wrapper">\ostkit\getCounterValues</span></a></dd>
                                                                 </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
@@ -1841,6 +1843,12 @@
                 <pre class="signature" style="margin-right: 54px;">getLedger(string  <span class="argument">$id</span>) : array|mixed</pre>
                 <p><em>Retrieves a list of all transactions where a user has been either the sender or a recipient of tokens.</em></p>
                 <p>This basically is the same as calling the /transactions endpoint with a user ID filter.</p>
+<p>Each transaction gets the following additional properties:</p>
+<ul>
+<li>converted countervalue in OST (ost_value)</li>
+<li>converted countervalue in USD (usd_value)</li>
+<li>hyperlink to OST VIEW (view_url)</li>
+</ul>
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
@@ -1870,6 +1878,8 @@
                     <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
                                                                             <dt>See also</dt>
                                                                 <dd><a href="https://dev.ost.com/docs/api_ledger.html"><span class="namespace-wrapper">https://dev.ost.com/docs/api_ledger.html</span></a></dd>
+                                                                                                    <dd><a href=""><span class="namespace-wrapper">\ostkit\getCounterValues</span></a></dd>
+                                            <dd><a href=""><span class="namespace-wrapper">\ostkit\getOstPricePoints</span></a></dd>
                                                                 </dl>
             <h2>Tags</h2>
             <table class="table table-condensed">
@@ -2117,6 +2127,58 @@
     </div>
 
                                                     <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getCounterValues" name="method_getCounterValues" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">getCounterValues()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getCounterValues(  <span class="argument">$brandedTokenAmount</span>, double  <span class="argument">$exchangeRate = null</span>) : mixed</pre>
+                <p><em>Countervalues in OST and USD are calculated as:
+ - converted countervalue in OST (ost_value)
+ - converted countervalue in USD (usd_value)</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$brandedTokenAmount </td>
+                                <td><p>int amount in Branded Token</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>double</td>
+                                <td>$exchangeRate </td>
+                                <td><p>OST/USD exchange rate</p></td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception</dt>
+                            <dd></dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper">\ostkit\getOstPricePoints</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
         <div class="span8 content class">
             <a id="method_validateName" name="method_validateName" class="anchor"></a>
             <article class="method">
@@ -2450,6 +2512,47 @@
         </aside>
     </div>
 
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_createOstViewUrl" name="method_createOstViewUrl" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">createOstViewUrl()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">createOstViewUrl(  <span class="argument">$hash</span>) : string</pre>
+                <p><em>Creates a URL to OST VIEW for the given transaction hash, takes the utility chain ID into account.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td></td>
+                                <td>$hash </td>
+                                <td><p>string Transaction hash</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>URL to display this transaction in OST VIEW</p>
+                                    
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="../classes/ostkit.OstKitClient.html"><div class="path-wrapper">\ostkit\OstKitClient</div></a></dd>
+                                                                            <dt>See also</dt>
+                                                                <dd><a href=""><span class="namespace-wrapper">\ostkit\getToken</span></a></dd>
+                                                                </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
                                     </div>
     </section>
 
@@ -2500,7 +2603,7 @@
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on July 22nd, 2018 at 09:03.
+                    on July 24th, 2018 at 13:33.
                 </section>
             </section>
         </section>
