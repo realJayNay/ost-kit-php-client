@@ -106,6 +106,7 @@ class OstKitClient {
     public function createUser($name) {
         self::validateName($name);
         $user = $this->post('/users', array('name' => $name));
+        $user['view_url'] = $this->createOstViewUrl($user['addresses'][0][1], 'address');
         $this->log->info('Created user', $user);
         return $user;
     }
@@ -124,6 +125,7 @@ class OstKitClient {
         self::validateUuid($id);
         self::validateName($name);
         $user = $this->post("/users/$id", array('name' => $name));
+        $user['view_url'] = $this->createOstViewUrl($user['addresses'][0][1], 'address');
         $this->log->info('Updated user', $user);
         return $user;
     }
@@ -140,6 +142,7 @@ class OstKitClient {
     public function getUser($id) {
         self::validateUuid($id);
         $user = $this->get("/users/$id", false);
+        $user['view_url'] = $this->createOstViewUrl($user['addresses'][0][1], 'address');
         $this->log->info('Retrieved user', $user);
         return $user;
     }
@@ -869,13 +872,14 @@ class OstKitClient {
     }
 
     /**
-     * Creates a URL to OST VIEW for the given transaction hash, takes the utility chain ID into account.
+     * Creates a URL to OST VIEW for the given transaction hash or wallet address, takes the utility chain ID into account.
      *
-     * @param $hash string Transaction hash
+     * @param $value string Transaction hash or Wallet address
+     * @param string $type either 'transaction' or 'address' (keep in line with what you expect)
      * @return string URL to display this transaction in OST VIEW
      * @see getToken
      */
-    private function createOstViewUrl($hash) {
-        return "https://view.ost.com/chain-id/{$this->token['ost_utility_balance'][0][0]}/transaction/$hash";
+    private function createOstViewUrl($value, $type = 'transaction') {
+        return "https://view.ost.com/chain-id/{$this->token['ost_utility_balance'][0][0]}/$type/$value";
     }
 }
