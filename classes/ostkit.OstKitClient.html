@@ -144,19 +144,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-218612281"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-956636283"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-218612281" class="accordion-body collapse in">
+            <div id="namespace-956636283" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1553421465"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1701758119"></a>
                                 <a href="../namespaces/ostkit.html" style="margin-left: 30px; padding-left: 0">ostkit</a>
             </div>
-            <div id="namespace-1553421465" class="accordion-body collapse ">
+            <div id="namespace-1701758119" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -2518,16 +2518,21 @@
             <article class="method">
                 <h3 class="private ">createOstViewUrl()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">createOstViewUrl(  <span class="argument">$hash</span>) : string</pre>
-                <p><em>Creates a URL to OST VIEW for the given transaction hash, takes the utility chain ID into account.</em></p>
+                <pre class="signature" style="margin-right: 54px;">createOstViewUrl(  <span class="argument">$value</span>, string  <span class="argument">$type = &#039;transaction&#039;</span>) : string</pre>
+                <p><em>Creates a URL to OST VIEW for the given transaction hash or wallet address, takes the utility chain ID into account.</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td></td>
-                                <td>$hash </td>
-                                <td><p>string Transaction hash</p></td>
+                                <td>$value </td>
+                                <td><p>string Transaction hash or Wallet address</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$type </td>
+                                <td><p>either 'transaction' or 'address' (keep in line with what you expect)</p></td>
                             </tr>
                                             </table>
                 
@@ -2603,7 +2608,7 @@
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on July 24th, 2018 at 13:33.
+                    on July 25th, 2018 at 06:21.
                 </section>
             </section>
         </section>
