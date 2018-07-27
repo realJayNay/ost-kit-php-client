@@ -708,7 +708,7 @@ class OstKitClient {
             if (isset($jsonArray['data']['meta']['next_page_payload']['page_no'])) {
                 // recursively fetch all items
                 $nextPage = $jsonArray['data']['meta']['next_page_payload']['page_no'];
-                while (isset($nextPage) && $nextPage != $arguments['page_no']) {
+                while (isset($nextPage) && isset($arguments['page_no']) && $nextPage != $arguments['page_no']) {
                     $this->log->debug("fetching page $nextPage");
                     $arguments['page_no'] = $nextPage;
                     $add = $this->get($endpoint, $fetchAll, $arguments);
