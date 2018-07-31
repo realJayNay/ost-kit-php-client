@@ -4,6 +4,7 @@ namespace ostkit;
 
 use Exception;
 use InvalidArgumentException;
+use Monolog\Handler\HandlerInterface;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -88,6 +89,16 @@ class OstKitClient {
             $this->log->warn('Unable to set stream handlers for stderr and stdout. Falling back to default monolog configuration.');
         }
     }
+
+    /**
+     * Exposes the Monolog logger, primarily to configure new handlers.
+     *
+     * @return Logger monolog logger
+     */
+    public function getMonolog() {
+        return $this->log;
+    }
+
 
     /**
      * @throws Exception when the HTTP call is unsuccessful
