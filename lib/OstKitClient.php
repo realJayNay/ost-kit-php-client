@@ -42,6 +42,11 @@ class OstKitClient {
     const UUID_REGEX = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
 
     /**
+     * Link to OST VIEW pattern, for formatting links to transactions, addresses and token details.
+     */
+    const VIEW_URL = 'https://view.ost.com/chain-id/%s/%s/%s';
+
+    /**
      * Static factory for OstKitClient instances. Creates a new OST KIT PHP client using your API key and secret.
      *
      * @param string $apiKey OST API key (mandatory)
@@ -106,7 +111,7 @@ class OstKitClient {
     public function createUser($name) {
         self::validateName($name);
         $user = $this->post('/users', array('name' => $name));
-        $user['view_url'] = $this->createOstViewUrl($user['addresses'][0][1], 'address');
+        $user['view_url'] = sprintf(self::VIEW_URL, $this->token['ost_utility_balance'][0][0], 'address', $user['addresses'][0][1]);
         $this->log->info('Created user', $user);
         return $user;
     }
@@ -125,7 +130,7 @@ class OstKitClient {
         self::validateUuid($id);
         self::validateName($name);
         $user = $this->post("/users/$id", array('name' => $name));
-        $user['view_url'] = $this->createOstViewUrl($user['addresses'][0][1], 'address');
+        $user['view_url'] = sprintf(self::VIEW_URL, $this->token['ost_utility_balance'][0][0], 'address', $user['addresses'][0][1]);
         $this->log->info('Updated user', $user);
         return $user;
     }
@@ -142,7 +147,7 @@ class OstKitClient {
     public function getUser($id) {
         self::validateUuid($id);
         $user = $this->get("/users/$id", false);
-        $user['view_url'] = $this->createOstViewUrl($user['addresses'][0][1], 'address');
+        $user['view_url'] = sprintf(self::VIEW_URL, $this->token['ost_utility_balance'][0][0], 'address', $user['addresses'][0][1]);
         $this->log->info('Retrieved user', $user);
         return $user;
     }
@@ -406,9 +411,8 @@ class OstKitClient {
     public function getTransaction($id) {
         self::validateUuid($id);
         $transaction = $this->get("/transactions/$id", false);
-        $hash = $transaction['transaction_hash'];
-        if (isset($hash)) {
-            $transaction['view_url'] = $this->createOstViewUrl($hash);
+        if (isset($transaction['transaction_hash'])) {
+            $transaction['view_url'] = sprintf(self::VIEW_URL, $this->token['ost_utility_balance'][0][0], 'transaction', $transaction['transaction_hash']);
         }
         $this->log->debug('Retrieved transaction', $transaction);
         return $transaction;
@@ -431,6 +435,7 @@ class OstKitClient {
             $this->log->debug('Imploded optional_filters to ' . $params['optional_filters']);
         }
         $transactions = $this->get('/transactions', $fetchAll, $params);
+        $transactions = $this->addTransactionsViewUrl($transactions);
         $this->log->info('Listed ' . sizeof($transactions) . ' transactions', $transactions);
         return $transactions;
     }
@@ -560,6 +565,7 @@ class OstKitClient {
     public function getToken() {
         $token = $this->get('/token', false);
         $this->log->debug('Retrieved token', $token);
+        $token['view_url'] = sprintf(self::VIEW_URL, $token['ost_utility_balance'][0][0], 'tokendetails', $token['token_erc20_address']);
         return $token;
     }
 
@@ -608,6 +614,7 @@ class OstKitClient {
     public function getCombinedBalance($id) {
         $balance = array_merge($this->getBalance($id), $this->token);
         $balance = array_merge($balance, $this->getCounterValues($balance['available_balance']));
+        $balance['token_view_url'] = $this->token['view_url'];
         $this->log->debug("Calculated enhanced balance for user $id", $balance);
         return $balance;
     }
@@ -653,18 +660,28 @@ class OstKitClient {
      */
     public function getLedger($id) {
         self::validateUuid($id);
-        $exchangeRate = $this->getOstPricePoints();
-        $exchangeRate = $exchangeRate['USD'];
         $ledger = $this->get("/ledger/$id", true);
-        $ledger = array_map(function ($transaction) use ($exchangeRate) {
-            if (isset($transaction['transaction_hash'])) {
-                $transaction['view_url'] = $this->createOstViewUrl($transaction['transaction_hash']);
-            }
-            $transaction = array_merge($transaction, $this->getCounterValues($transaction['amount'], $exchangeRate));
-            return $transaction;
-        }, $ledger);
+        $ledger = $this->addTransactionsViewUrl($ledger);
         $this->log->debug("Retrieved enhanced ledger for user $id", $ledger);
         return $ledger;
+    }
+
+    /**
+     * Adds a link to OST VIEW and the OST/USD exchange rate for each transaction in the array.
+     *
+     * @param $transactions array decoded JSON array of the 'transaction' result type
+     * @return array decoded JSON array of the 'transaction' result type
+     * @throws Exception when retrieving the OST price points fails
+     */
+    private function addTransactionsViewUrl($transactions) {
+        $exchangeRate = $this->getOstPricePoints();
+        return array_map(function ($transaction) use ($exchangeRate) {
+            if (isset($transaction['transaction_hash'])) {
+                $transaction['view_url'] = sprintf(self::VIEW_URL, $this->token['ost_utility_balance'][0][0], 'transaction', $transaction['transaction_hash']);
+            }
+            $transaction = array_merge($transaction, $this->getCounterValues($transaction['amount'], $exchangeRate['USD']));
+            return $transaction;
+        }, $transactions);
     }
 
     /**
@@ -869,17 +886,5 @@ class OstKitClient {
             }
         }
         throw new InvalidArgumentException("$subject '$input' has an invalid value. Possible values are: " . implode(', ', $values));
-    }
-
-    /**
-     * Creates a URL to OST VIEW for the given transaction hash or wallet address, takes the utility chain ID into account.
-     *
-     * @param $value string Transaction hash or Wallet address
-     * @param string $type either 'transaction' or 'address' (keep in line with what you expect)
-     * @return string URL to display this transaction in OST VIEW
-     * @see getToken
-     */
-    private function createOstViewUrl($value, $type = 'transaction') {
-        return "https://view.ost.com/chain-id/{$this->token['ost_utility_balance'][0][0]}/$type/$value";
     }
 }
